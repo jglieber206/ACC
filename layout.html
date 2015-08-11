@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html ng-app="accApp">
+<head>
+  <title>Projects list</title>
+  <link rel="stylesheet" type="text/css" href="/style.css">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
+  <script>
+    var accApp = angular.module('accApp', ['ngRoute']);
+
+    accApp.config(function($routeProvider) {
+      $routeProvider.
+        when('/projects', {
+          template: 'project_list.html'
+          controller: 'ProjCtrl'
+        }).
+        when('/:projectId', {
+          template: '<tr><th></th><th ng-repeat="attribute in attributes">{{attribute.name}}</th></tr>'
+          controller: 'GridCtrl'
+        }).
+        otherwise({
+          redirectTo: '/'
+        });
+      });
+
+    accApp.controller('ProjCtrl', function ($scope, $http) {
+      $http.get('projects').success(function(data) {
+        $scope.projects = data;
+      });
+    });
+    accApp.controller('GridCtrl', function ($scope, $routeParams) {
+      $scope.attribute = $routeParams.attributeName;
+    });
+  </script>
+</head>
+<body ng-controller="AccCtrl">
+  <div class="sidebar">
+    <table class="list">
+      <tr>
+        <h2>Project Name</h2>
+      </tr>
+      <tr ng-repeat="project in projects">
+        <td>{{project.name}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="project">
+    <table class="grid">
+      <tr ng-repeat="attr in attributes">
+        <th>{{attr.name}}</th>
+      </tr>
+      <tr>
+
+    </table>
+  </div>
+
+
+
+<!--  <script>
+/***************************
+Build & display project list
+***************************/
+//     var projects = [{ "name": "Jace's Project", "id": "0001"},
+//                     { "name": "Project 2", "id": "0002"},
+//                     { "name": "Other Project", "id": "0003" }];
+//     var out = "<table class=\"list\">" + "<h2>List of Projects</h2>";
+//     for(i = 0; i < projects.length; i++) {
+//       out += "<tr><th>" + projects[i].name + "</th><td>Delete</td></tr>"
+//     }
+//     var add = "<tr><th colspan=\"2\">Add</th></tr>";
+//     out += add + "</table>";
+//     document.getElementById("myList").innerHTML = out;
+
+// /* project functions */
+//     function add_project() {}
+//     function delete_project() {}
+
+// /***************************
+// Build & display project grid
+// ***************************/
+//     document.getElementById("p1").innerHTML = projects[0].name;
+//     var attributes = [{ "name": "Fast", "id": "1001" },
+//                       { "name": "Accurate", "id": "1002" },
+//                       { "name": "Secure", "id": "1003" }];
+//     var components = [{ "name": "dokidoki", "id": "2001" },
+//                       { "name": "marketing", "id": "2002" },
+//                       { "name": "love index", "id": "2003" }];
+//     var grid = "<table class=\"main\">" + "<tr><th>&nbsp</th>"
+//     for(i = 0; i < attributes.length; i++) {
+//       grid += "<th>" + attributes[i].name + "</th>";
+//     }
+//     grid += "</tr>";
+//     for(i = 0; i < components.length; i++) {
+//       grid += "<tr><th>" + components[i].name + "</th>";
+//       for(j = 0; j < attributes.length; j++) {
+//         grid += "<th>&nbsp</th>";
+//       }
+//       grid += "</tr>";
+//     }
+//     grid += "</table>";
+//     document.getElementById("project").innerHTML = grid;
+
+// /* grid functions */
+//     function add_attribute() {}
+//     function delete_attribute() {}
+//     function add_component() {}
+//     function delete_component() {}
+
+  </script> -->
+
+
+
+</body>
+</html>
+
+<!-- running javascript to point to -->

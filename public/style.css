@@ -1,0 +1,53 @@
+html, body {
+  height: 100%;
+  background-color: linen;
+}
+/* sidebar */
+.list {
+  border: 1px solid black;
+  float: center;
+  margin: 10px;
+  text-align: center;
+  width: 90%;
+}
+.list th:empty {
+  border:none;
+}
+.list th, .list td {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+.list th {
+  border-right: 1px solid grey;
+}
+.list tr:nth-child(odd) {
+  background-color: #ccc;
+}
+.list th:nth-last-child(1) {
+  border-right: 0px;
+  border-top: 1px solid black;
+  padding-bottom: 0px;
+  padding-top: 5px;
+}
+.sidebar {
+  background: linen;
+  float: left;
+  height: 100%;
+  text-align: center;
+  width: 250px;
+}
+
+/* project grid */
+.project {
+  text-align: center;
+  float: center;
+}
+.grid {
+  border-collapse: collapse;
+  padding-left: 100px;
+  margin-left: 20px;
+}
+.grid th {
+  border: 1px solid black;
+  padding: 10px;
+}
