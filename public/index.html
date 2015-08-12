@@ -3,58 +3,31 @@
 <head>
   <title>Projects list</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
   <script>
-    var accApp = angular.module('accApp', ['ngRoute']);
+    var accApp = angular.module('accApp') {
+      //when hits onload event, loads data
+      //controller processes data
 
-    accApp.config(function($routeProvider) {
-      $routeProvider.
-        when('/projects', {
-          template: 'project_list.html'
-          controller: 'ProjCtrl'
-        }).
-        when('/:projectId', {
-          template: '<tr><th></th><th ng-repeat="attribute in attributes">{{attribute.name}}</th></tr>'
-          controller: 'GridCtrl'
-        }).
-        otherwise({
-          redirectTo: '/'
-        });
-      });
+    }
 
-    accApp.controller('ProjCtrl', function ($scope, $http) {
-      $http.get('projects').success(function(data) {
-        $scope.projects = data;
+    accApp.controller('ProjectListCtrl', function ($scope, $http) {
+        $scope.projects = $http.get('/projects').get(params["name"])
       });
     });
     accApp.controller('GridCtrl', function ($scope, $routeParams) {
-      $scope.attribute = $routeParams.attributeName;
+        $scope.id = $routeParams.id;
+      });
     });
   </script>
 </head>
-<body ng-controller="AccCtrl">
-  <div class="sidebar">
-    <table class="list">
-      <tr>
-        <h2>Project Name</h2>
-      </tr>
-      <tr ng-repeat="project in projects">
-        <td>{{project.name}}</td>
-      </tr>
-    </table>
-  </div>
-  <div class="project">
-    <table class="grid">
-      <tr ng-repeat="attr in attributes">
-        <th>{{attr.name}}</th>
-      </tr>
-      <tr>
-
-    </table>
-  </div>
-
-
+<body>
+  <p>{{scope.projects}}</p>
+  <div ng-view></div>
+  <h1>this is the index page</h1>
+</body>
+</html>
 
 <!--  <script>
 /***************************
@@ -107,10 +80,4 @@ Build & display project list
 //     function delete_component() {}
 
   </script> -->
-
-
-
-</body>
-</html>
-
 <!-- running javascript to point to -->
