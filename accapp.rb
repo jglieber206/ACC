@@ -3,6 +3,7 @@ require 'sinatra'
 require 'json'
 
 @@projects = { "0001"=> {
+    "id"=> "0001",
     "title"=> "Jace's Project",
     "attributes"=> [
       { "name"=> "Fast", "id"=> 1001 },
@@ -17,6 +18,7 @@ require 'json'
     ]
   },
   "0002"=> {
+    "id"=> "0002",
     "title"=> "Drew's Project",
     "attributes"=> [
       { "name"=> "Fast", "id"=> 1001 },
@@ -31,6 +33,7 @@ require 'json'
     ]
   },
   "0003"=> {
+    "id"=> "0003",
     "title"=> "Joel's Project",
     "attributes"=> [
       { "name"=> "Reliable", "id"=> 1007 },
@@ -44,6 +47,15 @@ require 'json'
       { "name"=> "love index", "id"=> 2003 }
     ]
   }}
+  @@template = {
+    "title"=> "New Project",
+    "attributes"=> [
+      {"name"=> "", "id"=> ""}
+    ],
+    "components"=> [
+      {"name"=> "", "id"=> ""}
+    ]
+  }
 
 get '/projects/:id' do
   @@projects[params['id']].to_json
@@ -51,6 +63,10 @@ end
 
 get '/projects' do
   @@projects.to_json
+end
+
+post '/projects' do
+  @@projects << @@template
 end
 
 get '/' do
@@ -62,6 +78,6 @@ get '/public/:filename' do
 end
 
 delete '/projects/:id' do
-  remove @@projects[params['id']] # figure out syntax
+  remove @@projects[params['id']]
   return 200 # or new list of projects as json
 end

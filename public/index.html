@@ -6,26 +6,36 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
   <script>
     var accApp = angular.module('accApp', []);
-    accApp.controller('ProjectListCtrl', function ($scope, $http) {
+    accApp.controller('ProjectCtrl', function ($scope, $http) {
       $http.get('/projects').
         then(function(response) {
           $scope.projects = response.data
-        })
-    });
-   accApp.controller('GridCtrl', function ($scope, $http) {
-      $http.get('/projects/0001').
-        then(function(response) {
-          $scope.project = response.data
-        })
+        }),
+      $scope.currentProjectId = ''
+      // $scope.$watch.currentProject = ""
+      $scope.$watch('$scope.currentProjectId', function(newVal, oldVal) {
+        $http.get('/projects/' + $scope.currentProjectId).
+          then(function(response) {
+            $scope.project = response.data
+          })
+      })
+      // function to take project id & set to variable to pass into get url
+      // $scope.getProj = function(project) {
+      //   {{project.id}}
+      // }
+      // $http.post('/projects').
+      //   then(function(newProj) {
+      //     $scope.projects << newProj
+      //   })
     });
   </script>
 </head>
 <body>
-  <div class="sidebar" ng-controller="ProjectListCtrl">
+  <div class="sidebar" ng-controller="ProjectCtrl">
     <h2>Project list</h2>
     <table class="list">
       <tr ng-repeat="project in projects">
-        <th>{{project.title}}</th>
+        <th><a href="" ng-click="currentProjectId = '0001'">{{project.title}}</a></th>
         <td>Delete</td>
       </tr>
       <tr>
@@ -33,14 +43,14 @@
       </tr>
     </table>
   </div>
-  <div class="project" ng-controller="GridCtrl">
+  <div class="project" ng-controller="ProjectCtrl">
     <h1>{{project.title}}</h1>
-    <table class="grid" id="proj">
+    <table id="grid">
       <script>
         var grid = "<tr><th>&nbsp</th>"
         grid += "<th ng-repeat=\"attribute in project.attributes\">{{attribute.name}}</th></tr>"
         grid += "<tr ng-repeat=\"component in project.components\"><th>{{component.name}}</th><th ng-repeat=\"attribute in project.attributes\">&nbsp</th></tr>"
-        document.getElementById("proj").innerHTML = grid;
+        document.getElementById("grid").innerHTML = grid;
       </script>
     </table>
   </div>
