@@ -4,80 +4,45 @@
   <title>Projects list</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.10/angular-route.min.js"></script>
   <script>
-    var accApp = angular.module('accApp') {
-      //when hits onload event, loads data
-      //controller processes data
-
-    }
-
+    var accApp = angular.module('accApp', []);
     accApp.controller('ProjectListCtrl', function ($scope, $http) {
-        $scope.projects = $http.get('/projects').get(params["name"])
-      });
+      $http.get('/projects').
+        then(function(response) {
+          $scope.projects = response.data
+        })
     });
-    accApp.controller('GridCtrl', function ($scope, $routeParams) {
-        $scope.id = $routeParams.id;
-      });
+   accApp.controller('GridCtrl', function ($scope, $http) {
+      $http.get('/projects/0001').
+        then(function(response) {
+          $scope.project = response.data
+        })
     });
   </script>
 </head>
 <body>
-  <p>{{scope.projects}}</p>
-  <div ng-view></div>
-  <h1>this is the index page</h1>
+  <div class="sidebar" ng-controller="ProjectListCtrl">
+    <h2>Project list</h2>
+    <table class="list">
+      <tr ng-repeat="project in projects">
+        <th>{{project.title}}</th>
+        <td>Delete</td>
+      </tr>
+      <tr>
+        <th colspan="2">Add</th>
+      </tr>
+    </table>
+  </div>
+  <div class="project" ng-controller="GridCtrl">
+    <h1>{{project.title}}</h1>
+    <table class="grid" id="proj">
+      <script>
+        var grid = "<tr><th>&nbsp</th>"
+        grid += "<th ng-repeat=\"attribute in project.attributes\">{{attribute.name}}</th></tr>"
+        grid += "<tr ng-repeat=\"component in project.components\"><th>{{component.name}}</th><th ng-repeat=\"attribute in project.attributes\">&nbsp</th></tr>"
+        document.getElementById("proj").innerHTML = grid;
+      </script>
+    </table>
+  </div>
 </body>
 </html>
-
-<!--  <script>
-/***************************
-Build & display project list
-***************************/
-//     var projects = [{ "name": "Jace's Project", "id": "0001"},
-//                     { "name": "Project 2", "id": "0002"},
-//                     { "name": "Other Project", "id": "0003" }];
-//     var out = "<table class=\"list\">" + "<h2>List of Projects</h2>";
-//     for(i = 0; i < projects.length; i++) {
-//       out += "<tr><th>" + projects[i].name + "</th><td>Delete</td></tr>"
-//     }
-//     var add = "<tr><th colspan=\"2\">Add</th></tr>";
-//     out += add + "</table>";
-//     document.getElementById("myList").innerHTML = out;
-
-// /* project functions */
-//     function add_project() {}
-//     function delete_project() {}
-
-// /***************************
-// Build & display project grid
-// ***************************/
-//     document.getElementById("p1").innerHTML = projects[0].name;
-//     var attributes = [{ "name": "Fast", "id": "1001" },
-//                       { "name": "Accurate", "id": "1002" },
-//                       { "name": "Secure", "id": "1003" }];
-//     var components = [{ "name": "dokidoki", "id": "2001" },
-//                       { "name": "marketing", "id": "2002" },
-//                       { "name": "love index", "id": "2003" }];
-//     var grid = "<table class=\"main\">" + "<tr><th>&nbsp</th>"
-//     for(i = 0; i < attributes.length; i++) {
-//       grid += "<th>" + attributes[i].name + "</th>";
-//     }
-//     grid += "</tr>";
-//     for(i = 0; i < components.length; i++) {
-//       grid += "<tr><th>" + components[i].name + "</th>";
-//       for(j = 0; j < attributes.length; j++) {
-//         grid += "<th>&nbsp</th>";
-//       }
-//       grid += "</tr>";
-//     }
-//     grid += "</table>";
-//     document.getElementById("project").innerHTML = grid;
-
-// /* grid functions */
-//     function add_attribute() {}
-//     function delete_attribute() {}
-//     function add_component() {}
-//     function delete_component() {}
-
-  </script> -->
-<!-- running javascript to point to -->
