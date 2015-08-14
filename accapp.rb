@@ -2,6 +2,8 @@ require 'bundler/setup'
 require 'sinatra'
 require 'json'
 
+set :public_folder, File.dirname(__FILE__) + '/public'
+
 @@projects = { "0001"=> {
     "id"=> "0001",
     "title"=> "Jace's Project",
@@ -69,15 +71,12 @@ post '/projects' do
   @@projects << @@template
 end
 
-get '/' do
-  File.read('public/index.html')
-end
-
-get '/public/:filename' do
-  File.read("public/#{params['filename']}")
-end
+#get '/' do
+#  File.read('index.html')
+#end
 
 delete '/projects/:id' do
-  remove @@projects[params['id']]
+  @@projects.delete params['id']
+  #remove @@projects[params['id']]
   return 200 # or new list of projects as json
 end
