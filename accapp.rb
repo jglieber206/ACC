@@ -2,6 +2,8 @@ require 'bundler/setup'
 require 'sinatra'
 require 'json'
 
+set :public_folder, File.dirname(__FILE__) + '/public'
+
 @@projects = { "0001"=> {
     "id"=> "0001",
     "title"=> "Jace's Project",
@@ -78,6 +80,6 @@ get '/public/:filename' do
 end
 
 delete '/projects/:id' do
-  remove @@projects[params['id']]
+  @@projects.delete params['id']
   return 200 # or new list of projects as json
 end

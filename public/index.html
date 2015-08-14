@@ -6,44 +6,58 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
   <script>
     var accApp = angular.module('accApp', []);
-    accApp.controller('ProjectCtrl', function ($scope, $http) {
-      $http.get('/projects').
-        then(function(response) {
-          $scope.projects = response.data
-        }),
-      $scope.currentProjectId = ''
-      // $scope.$watch.currentProject = ""
-      $scope.$watch('$scope.currentProjectId', function(newVal, oldVal) {
-        $http.get('/projects/' + $scope.currentProjectId).
-          then(function(response) {
-            $scope.project = response.data
-          })
-      })
-      // function to take project id & set to variable to pass into get url
-      // $scope.getProj = function(project) {
-      //   {{project.id}}
-      // }
-      // $http.post('/projects').
-      //   then(function(newProj) {
-      //     $scope.projects << newProj
+    accApp.controller('ProjectCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
+      $scope.projectList = []
+      $scope.getAll = function() {
+        $http({
+          method: 'GET',
+          url: '/projects'
+        })
+        .success(function(response) { $scope.projectList = response })
+        .error(function() { console.log("error") });
+      }
+
+      $scope.openProject = function(id) {
+        $http({
+          method: 'GET',
+          url: '/projects/' + id
+        })
+        .success(function(response) { $scope.project = response })
+        .error(function() { console.log("error") })
+      };
+
+      $scope.deleteProject = function(id) {
+        $http({
+          method: 'DELETE',
+          url: '/projects/' + id
+        })
+        .success(function(project) { console.log(project) })
+        .error(function() {console.log("error")})
+      }
+
+      // $scope.addProject = function() {
+      //   $http({
+      //     method: 'POST',
+      //     url: '/projects'
       //   })
-    });
+      // }
+    }]);
   </script>
 </head>
-<body>
-  <div class="sidebar" ng-controller="ProjectCtrl">
+<body ng-controller="ProjectCtrl">
+  <div class="sidebar" ng-init="getAll()">
     <h2>Project list</h2>
     <table class="list">
-      <tr ng-repeat="project in projects">
-        <th><a href="" ng-click="currentProjectId = '0001'">{{project.title}}</a></th>
-        <td>Delete</td>
+      <tr ng-repeat="project in projectList">
+        <th><a href="" ng-click="openProject(project.id)">{{project.title}}</a></th>
+        <td><a href="" ng-click="deleteProject(project.id)">Delete</a></td>
       </tr>
       <tr>
         <th colspan="2">Add</th>
       </tr>
     </table>
   </div>
-  <div class="project" ng-controller="ProjectCtrl">
+  <div class="project" ng-init="openProject()">
     <h1>{{project.title}}</h1>
     <table id="grid">
       <script>
