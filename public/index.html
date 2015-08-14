@@ -6,19 +6,30 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
   <script>
     var accApp = angular.module('accApp', []);
-    accApp.controller('ProjectCtrl', function ($scope, $http) {
+    accApp.controller('ProjectCtrl', function ($scope, $http, $timeout) {
       $http.get('/projects').
         then(function(response) {
           $scope.projects = response.data
-        }),
-      $scope.currentProjectId = ''
+        });
+
+      $scope.openProject = function(id) {
+        $http.get('/projects/' + id).
+        then(function(response) { $scope.project = response.data })
+      };
+
+      $scope.deleteProject = function(id) {
+        $http.delete('/projects/' + id).
+        then(function() { $http.get('/projects')}.
+                then(function(response) { $scope.projects = response.data }))
+      };
+
       // $scope.$watch.currentProject = ""
-      $scope.$watch('$scope.currentProjectId', function(newVal, oldVal) {
-        $http.get('/projects/' + $scope.currentProjectId).
-          then(function(response) {
-            $scope.project = response.data
-          })
-      })
+//      $scope.$watch('$scope.currentProjectId', function(newVal, oldVal) {
+//        $http.get('/projects/' + $scope.currentProjectId).
+//          then(function(response) {
+//            $scope.project = response.data
+//          })
+//      })
       // function to take project id & set to variable to pass into get url
       // $scope.getProj = function(project) {
       //   {{project.id}}
@@ -28,6 +39,7 @@
       //     $scope.projects << newProj
       //   })
     });
+
   </script>
 </head>
 <body>
@@ -35,8 +47,8 @@
     <h2>Project list</h2>
     <table class="list">
       <tr ng-repeat="project in projects">
-        <th><a href="" ng-click="currentProjectId = '0001'">{{project.title}}</a></th>
-        <td>Delete</td>
+        <th><a href="" ng-click="openProject(project.id)">{{project.title}}</a></th>
+        <td><a href="" ng-click="deleteProject(project.id)">Delete</a></td>
       </tr>
       <tr>
         <th colspan="2">Add</th>
