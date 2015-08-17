@@ -49,5 +49,12 @@ html, body {
 }
 #grid th {
   border: 1px solid black;
-  padding: 30px;
+  padding: 20px;
+}
+.animate-show {
+  line-height: 20px;
+  opacity: 1;
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
 }

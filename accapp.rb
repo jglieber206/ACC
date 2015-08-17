@@ -68,7 +68,7 @@ get '/projects' do
 end
 
 post '/projects' do
-  @@projects << @@template
+  @@projects.add params['id']
 end
 
 get '/' do

@@ -4,6 +4,7 @@
   <title>Projects list</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
   <script>
     var accApp = angular.module('accApp', []);
     accApp.controller('ProjectCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
@@ -32,19 +33,21 @@
           url: '/projects/' + id
         })
         .success(function(project) { console.log(project) })
-        .error(function() {console.log("error")})
+        .error(function() { console.log("error") })
       }
 
-      // $scope.addProject = function() {
-      //   $http({
-      //     method: 'POST',
-      //     url: '/projects'
-      //   })
-      // }
+      $scope.addProject = function() {
+        $http({
+          method: 'POST',
+          url: '/projects'
+        })
+        .success(function(project) { console.log(project) })
+        .error(function() { console.log("error") })
+      }
     }]);
   </script>
 </head>
-<body ng-controller="ProjectCtrl">
+<body ng-controller="ProjectCtrl" >
   <div class="sidebar" ng-init="getAll()">
     <h2>Project list</h2>
     <table class="list">
@@ -52,8 +55,19 @@
         <th><a href="" ng-click="openProject(project.id)">{{project.title}}</a></th>
         <td><a href="" ng-click="deleteProject(project.id)">Delete</a></td>
       </tr>
-      <tr>
-        <th colspan="2">Add</th>
+      <tr ng-model="showform">
+        <th colspan="2"><a href="" ng-click="showform=true" ng-hide="showform">Add</a></th>
+        <tr ng-show="showform">
+          <form>
+            <td colspan="2">
+              New project name: <input type="text"><br>
+              <a href="" ng-click="addProject" ng-show="showform">Create Project</a>
+            </td>
+          </form>
+        </tr>
+        <tr ng-show="showform">
+          <td colspan="2"><a href="" ng-click="showform=false" ng-show="showform">Cancel</a></td>
+        </tr>
       </tr>
     </table>
   </div>
