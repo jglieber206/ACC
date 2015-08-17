@@ -3,9 +3,9 @@ require 'sinatra'
 require 'json'
 
 set :public_folder, File.dirname(__FILE__) + '/public'
-
-@@projects = { "0001"=> {
-    "id"=> "0001",
+@@last_project = 3
+@@projects = { 1 => {
+    "id"=> 1,
     "title"=> "Jace's Project",
     "attributes"=> [
       { "name"=> "Fast", "id"=> 1001 },
@@ -19,8 +19,8 @@ set :public_folder, File.dirname(__FILE__) + '/public'
       { "name"=> "love index", "id"=> 2003 }
     ]
   },
-  "0002"=> {
-    "id"=> "0002",
+  2 => {
+    "id"=> 2,
     "title"=> "Drew's Project",
     "attributes"=> [
       { "name"=> "Fast", "id"=> 1001 },
@@ -34,8 +34,8 @@ set :public_folder, File.dirname(__FILE__) + '/public'
       { "name"=> "admin", "id"=> 2005 }
     ]
   },
-  "0003"=> {
-    "id"=> "0003",
+  3 => {
+    "id"=> 3,
     "title"=> "Joel's Project",
     "attributes"=> [
       { "name"=> "Reliable", "id"=> 1007 },
@@ -60,7 +60,7 @@ set :public_folder, File.dirname(__FILE__) + '/public'
   }
 
 get '/projects/:id' do
-  @@projects[params['id']].to_json
+  @@projects[params['id'].to_i].to_json
 end
 
 get '/projects' do
@@ -68,7 +68,11 @@ get '/projects' do
 end
 
 post '/projects' do
-  @@projects.add params['id']
+  # request.body.rewind
+  payload = JSON.parse(request.body.read)
+  @@last_project += 1
+  payload['id'] = @@last_project
+  @@projects[@@last_project] = payload
 end
 
 get '/' do
@@ -80,6 +84,6 @@ get '/public/:filename' do
 end
 
 delete '/projects/:id' do
-  @@projects.delete params['id']
+  @@projects.delete params['id'].to_i
   return 200 # or new list of projects as json
 end

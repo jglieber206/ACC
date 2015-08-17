@@ -39,9 +39,10 @@
       $scope.addProject = function() {
         $http({
           method: 'POST',
-          url: '/projects'
+          url: '/projects',
+          data: { title: this.newProjectTitle }
         })
-        .success(function(project) { console.log(project) })
+        .success(function() { console.log() })
         .error(function() { console.log("error") })
       }
     }]);
@@ -55,13 +56,13 @@
         <th><a href="" ng-click="openProject(project.id)">{{project.title}}</a></th>
         <td><a href="" ng-click="deleteProject(project.id)">Delete</a></td>
       </tr>
-      <tr ng-model="showform">
+      <tr>
         <th colspan="2"><a href="" ng-click="showform=true" ng-hide="showform">Add</a></th>
         <tr ng-show="showform">
-          <form>
+          <form class="new_project" ng-submit="addProject()">
             <td colspan="2">
-              New project name: <input type="text"><br>
-              <a href="" ng-click="addProject" ng-show="showform">Create Project</a>
+              New project name: <input ng-model="newProjectTitle" type="text"><br>
+              <input type="submit" value="Create Project" ng-show="showform" ng-click="showform=false">
             </td>
           </form>
         </tr>
