@@ -7,48 +7,102 @@
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
   <script>
     var accApp = angular.module('accApp', []);
-    accApp.controller('ProjectCtrl', ['$scope', '$http', '$timeout', function ($scope, $http, $timeout) {
-      $scope.projectList = []
-      $scope.getAll = function() {
-        $http({
-          method: 'GET',
-          url: '/projects'
-        })
-        .success(function(response) { $scope.projectList = response })
-        .error(function() { console.log("error") });
-      }
+    accApp.controller('ProjectCtrl', [
+      '$scope',
+      '$http',
+      function ($scope, $http) {
+        $scope.projectList = []
+        $scope.getAll = function() {
+          $http({
+            method: 'GET',
+            url: '/projects'
+          })
+          .success(function(response) { $scope.projectList = response })
+          .error(function() { console.log("error") });
+        }
 
-      $scope.openProject = function(id) {
-        $http({
-          method: 'GET',
-          url: '/projects/' + id
-        })
-        .success(function(response) { $scope.project = response })
-        .error(function() { console.log("error") })
-      };
+        // $scope.openProject = function(id) {
+        //   return $http.get('/projects/' + id)
+        //     .then(
+        //       function(response) {
+        //         return {
+        //           name: response.data.name,
+        //
+        //         }
+        //       }
+        //     )
+        // }
+        // $scope.openProject = function(id) {
+        //   $http({
+        //     method: 'GET',
+        //     url: '/projects/' + id
+        //   })
+        //   .success(function() { console.log("retrieved project!") })
+        //   .error(function() { console.log("error") })
+        // };
 
-      $scope.deleteProject = function(id) {
-        $http({
-          method: 'DELETE',
-          url: '/projects/' + id
-        })
-        .success(function(project) { console.log(project) })
-        .error(function() { console.log("error") })
-      }
+        // $scope.getAttributes = function(id) {
+        //   $http({
+        //     method: 'GET',
+        //     url: '/projects/' + id + '/attributes'
+        //   })
+        //   .success(function() { console.log("retrieved attributes!") })
+        //   .error(function() { console.log("error") })
+        // }
+        //
+        // $scope.getComponents = function(id) {
+        //   $http({
+        //     method: 'GET',
+        //     url: '/projects/' + id + '/components'
+        //   })
+        //   .success(function() { console.log("retrieved components!") })
+        //   .error(function() { console.log("error") })
+        // }
 
-      $scope.addProject = function() {
-        $http({
-          method: 'POST',
-          url: '/projects',
-          data: { title: this.newProjectTitle }
-        })
-        .success(function() { console.log() })
-        .error(function() { console.log("error") })
+        $scope.deleteProject = function(id) {
+          $http({
+            method: 'DELETE',
+            url: '/projects/' + id
+          })
+          .success(function(project) { console.log(project) })
+          .error(function() { console.log("error") })
+        }
+
+        $scope.addProject = function() {
+          $http({
+            method: 'POST',
+            url: '/projects',
+            data: { title: this.newProjectTitle }
+          })
+          .success(function() { console.log() })
+          .error(function() { console.log("error") })
+        }
+
+        $scope.addAttribute = function(id) {
+          $http({
+            method: 'POST',
+            url: '/projects/' + id + '/attributes',
+            data: this.newAttribute
+          })
+          .success(function() { console.log("Added attribute") })
+          .error(function() { console.log("error") })
+        }
+
+        $scope.addComponent = function(id) {
+          $http({
+            method: 'POST',
+            url: '/projects/' + id + '/components',
+            data: this.newComponentName
+          })
+          .success(function(component) { console.log($scope.newComponentName = component) })
+          .error(function() { console.log("error") })
+        }
+
       }
-    }]);
+    ]);
   </script>
 </head>
-<body ng-controller="ProjectCtrl" >
+<body ng-controller="ProjectCtrl">
   <div class="sidebar" ng-init="getAll()">
     <h2>Project list</h2>
     <table class="list">
@@ -56,32 +110,72 @@
         <th><a href="" ng-click="openProject(project.id)">{{project.title}}</a></th>
         <td><a href="" ng-click="deleteProject(project.id)">Delete</a></td>
       </tr>
-      <tr>
-        <th colspan="2"><a href="" ng-click="showform=true" ng-hide="showform">Add</a></th>
-        <tr ng-show="showform">
-          <form class="new_project" ng-submit="addProject()">
-            <td colspan="2">
-              New project name: <input ng-model="newProjectTitle" type="text"><br>
-              <input type="submit" value="Create Project" ng-show="showform" ng-click="showform=false">
-            </td>
-          </form>
-        </tr>
-        <tr ng-show="showform">
-          <td colspan="2"><a href="" ng-click="showform=false" ng-show="showform">Cancel</a></td>
-        </tr>
+      <th colspan="2"><a href="" ng-click="showform=true" ng-hide="showform">Add</a></th>
+      <tr ng-show="showform">
+        <form class="new_project" ng-submit="addProject()">
+          <td colspan="2">
+            New project name: <input ng-model="newProjectTitle" type="text"><br>
+            <input type="submit" value="Create Project" ng-show="showform" ng-click="showform=false"><br>
+            <a href="" ng-click="showform=false" ng-show="showform">Cancel</a>
+          </td>
+        </form>
       </tr>
     </table>
   </div>
-  <div class="project" ng-init="openProject()">
+  <div class="project" ng-init="openProject(1)">
     <h1>{{project.title}}</h1>
     <table id="grid">
-      <script>
-        var grid = "<tr><th>&nbsp</th>"
-        grid += "<th ng-repeat=\"attribute in project.attributes\">{{attribute.name}}</th></tr>"
-        grid += "<tr ng-repeat=\"component in project.components\"><th>{{component.name}}</th><th ng-repeat=\"attribute in project.attributes\">&nbsp</th></tr>"
-        document.getElementById("grid").innerHTML = grid;
-      </script>
+      <tr>
+        <th>&nbsp</th>
+        <th ng-init="getAttributes({{project.id}})" ng-repeat="attribute in attributes">{{attribute.name}}</th>
+      </tr>
+      <tr ng-repeat="component in project.components">
+        <th>{{component}}</th>
+        <th ng-repeat="attribute in project.attributes">&nbsp</th>
+      </tr>
     </table>
+    <h4><a href="" ng-click="edit_table=true" ng-hide="edit_table">Edit Table</a></h4>
+    <div class="attr_comp_list" ng-show="edit_table" col="2">
+      <table id="edit_attributes">
+        <tr>
+          <th><h3>Attributes:</h3></th>
+        </tr>
+        <tr ng-repeat="attribute in project.attributes">
+          <td>{{attribute}}</td>
+          <td><a href="" ng-click="deleteAttribute(attribute)">Remove</a></td>
+        </tr>
+        <th colspan="2"><a href="" ng-click="addAttr=true" ng-hide="addAttr">Add</a></th>
+        <tr ng-show="addAttr">
+          <form ng-submit="addAttribute(project.id)">
+            <td colspan="2">
+              New Attribute Name:<br>
+              <input ng-model="newAttribute" type="text"><br>
+              <input type="submit" value="Add Attribute" ng-click="addAttr=true"><br>
+              <a href="" ng-click="addAttr=false">Cancel</a>
+          </form>
+        </tr>
+      </table>
+      <table id="edit_components">
+        <tr>
+          <th><h3>Components:</h3></th>
+        </tr>
+        <tr ng-repeat="component in project.components">
+          <td>{{component}}</td>
+          <td><a href="" ng-click="deleteComponent(component)">Remove</a></td>
+        </tr>
+        <th colspan="2"><a href="" ng-click="addComp=true" ng-hide="addComp">Add</a></th>
+        <tr ng-show="addComp">
+          <form ng-submit="addComponent()">
+            <td colspan="2">
+              New Component Name:<br>
+              <input ng-model="newComponentName" type="text"><br>
+              <input type="submit" value="Add Component" ng-click="addComp=true"><br>
+              <a href="" ng-click="addComp=false">Cancel</a>
+          </form>
+        </tr>
+      </table><br>
+      <button ng-click="edit_table=false" ng-show="edit_table">Close</a>
+    </div>
   </div>
 </body>
 </html>
