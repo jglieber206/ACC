@@ -45,13 +45,13 @@
           .error(function() { console.log("error") })
         }
         // Attribute methods
-        $scope.project_attributes = []
+        $scope.attributesList = []
         $scope.getAttributes = function(id) {
           $http({
             method: 'GET',
             url: '/projects/' + id + '/attributes'
           })
-          .success(function(response) { $scope.project_attributes = response })
+          .success(function(response) { $scope.attributesList = response })
           .error(function() { console.log("error") })
         }
         $scope.addAttribute = function(id) {
@@ -72,13 +72,13 @@
           .error(function() { console.log("error") })
         }
         // Component methods
-        $scope.project_components = []
+        $scope.componentsList = []
         $scope.getComponents = function(id) {
           $http({
             method: 'GET',
             url: '/projects/' + id + '/components'
           })
-          .success(function(response) { $scope.project_components = response })
+          .success(function(response) { $scope.componentsList = response })
           .error(function() { console.log("error") })
         }
         $scope.addComponent = function(id) {
@@ -99,13 +99,13 @@
           .error(function() { console.log("error") })
         }
         // Capability methods
-        $scope.project_capabilities = []
+        $scope.capabilitiesList = []
         $scope.getCapabilities = function(id) {
           $http({
             method: 'GET',
             url: '/projects/' + id + '/capabilities'
           })
-          .success(function(response) { $scope.project_capabilities = response })
+          .success(function(response) { $scope.capabilitiesList = response })
           .error(function() { console.log("error returning capabilities") })
         }
         $scope.getCapability = function(id, attribute_id, component_id) {
@@ -132,7 +132,34 @@
 
         // Fill table
         $scope.fillTable = function(r, c) {
-          document.getElementById("grid").rows[r].cells[c].innerHTML = $scope.project_capabilities[r-1].name
+          var comp_id = $scope.componentsList[r-1].id;
+          var attr_id = $scope.attributesList[c-1].id;
+          var tmp;
+          console.log("compList = " + $scope.componentsList)
+          console.log("comp_id = " + comp_id)
+          console.log("attr_id = " + attr_id)
+          function getById(id, myArray) {
+            myArray.filter(function(obj) {
+              if(obj.id == id) {
+                tmp = myArray.indexOf(obj)
+                console.log("tmp=" + tmp)
+              }
+            })
+            return tmp
+          };
+          comp = getById(comp_id, $scope.capabilitiesList);
+          attr = getById(attr_id, $scope.capabilitiesList);
+          console.log("comp = " + comp);
+          console.log("attr = " + attr);
+          // c_index = $scope.capabilitiesList.where(["attribute_id"] == attr_id).to_i
+          // a_index = $scope.capabilitiesList.where(["component_id"] == comp_id).to_i
+          // a_index = $scope.capabilitiesList.index { |cap| cap["attribute_id"] == attr_id }
+          if (comp == attr) {
+            document.getElementById("grid").rows[r].cells[c].innerHTML = $scope.capabilitiesList[comp].name
+          }
+          else {
+            document.getElementById("grid").rows[r].cells[c].innerHTML = "No Capability"
+          }
         }
       }
     ]);
@@ -164,11 +191,11 @@
     <table id="grid">
       <tr>
         <th>&nbsp</th>
-        <th ng-repeat="attribute in project_attributes">{{attribute.name}}</th>
+        <th ng-repeat="attribute in attributesList">{{attribute.name}}</th>
       </tr>
-      <tr ng-repeat="component in project_components">
+      <tr ng-repeat="component in componentsList">
         <th>{{component.name}}</th>
-        <th ng-repeat="attribute in project_attributes"></th>
+        <th ng-repeat="attribute in attributesList"></th>
       </tr>
     </table>
     <h4><a href="" ng-click="edit_table=true" ng-hide="edit_table">Edit Table</a></h4>
@@ -177,7 +204,7 @@
         <tr>
           <th><h3>Attributes:</h3></th>
         </tr>
-        <tr ng-repeat="attribute in project_attributes">
+        <tr ng-repeat="attribute in attributesList">
           <td>{{attribute.name}}</td>
           <td><a href="" ng-click="deleteAttribute(attribute.id)">Remove</a></td>
         </tr>
@@ -196,7 +223,7 @@
         <tr>
           <th><h3>Components:</h3></th>
         </tr>
-        <tr ng-repeat="component in project_components">
+        <tr ng-repeat="component in componentsList">
           <td>{{component.name}}</td>
           <td><a href="" ng-click="deleteComponent(component)">Remove</a></td>
         </tr>
@@ -214,7 +241,7 @@
       <button ng-click="edit_table=false" ng-show="edit_table">Close</a>
     </div>
     <div>
-      <a href="" ng-click="fillTable(1,1)">Fill table</a>
+      <a href="" ng-click="fillTable(2,1)">Fill table</a>
     </div>
   </div>
   <div class="capability_form" ng-show="showcapability">
