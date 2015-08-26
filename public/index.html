@@ -105,7 +105,7 @@
             method: 'GET',
             url: '/projects/' + id + '/capabilities'
           })
-          .success(function(response) { $scope.capabilitiesList = response })
+          .success(function(response) { $scope.capabilitiesList = response; $scope.fillTable() })
           .error(function() { console.log("error returning capabilities") })
         }
         $scope.getCapability = function(id, attribute_id, component_id) {
@@ -130,14 +130,13 @@
           .error(function() { console.log("error deleting capability") })
         }
 
+
+
         // Fill table
-        $scope.fillTable = function(r, c) {
-          var comp_id = $scope.componentsList[r-1].id;
-          var attr_id = $scope.attributesList[c-1].id;
+        $scope.fillTable = function() {
+          table = document.getElementById("grid");
+          numberRows = table.rows
           var tmp;
-          console.log("compList = " + $scope.componentsList)
-          console.log("comp_id = " + comp_id)
-          console.log("attr_id = " + attr_id)
           function getById(id, myArray) {
             myArray.filter(function(obj) {
               if(obj.id == id) {
@@ -147,18 +146,22 @@
             })
             return tmp
           };
-          comp = getById(comp_id, $scope.capabilitiesList);
-          attr = getById(attr_id, $scope.capabilitiesList);
-          console.log("comp = " + comp);
-          console.log("attr = " + attr);
-          // c_index = $scope.capabilitiesList.where(["attribute_id"] == attr_id).to_i
-          // a_index = $scope.capabilitiesList.where(["component_id"] == comp_id).to_i
-          // a_index = $scope.capabilitiesList.index { |cap| cap["attribute_id"] == attr_id }
-          if (comp == attr) {
-            document.getElementById("grid").rows[r].cells[c].innerHTML = $scope.capabilitiesList[comp].name
-          }
-          else {
-            document.getElementById("grid").rows[r].cells[c].innerHTML = "No Capability"
+          for (var i = 1; i < numberRows.length; i++) {
+            for (var j = 1; j < numberRows[i].cells.length; j++) {
+              var comp_id = $scope.componentsList[i-1].id;
+              var attr_id = $scope.attributesList[j-1].id;
+
+              comp = getById(comp_id, $scope.capabilitiesList);
+              attr = getById(attr_id, $scope.capabilitiesList);
+              console.log("comp = " + comp);
+              console.log("attr = " + attr);
+              if (comp == attr) {
+                document.getElementById("grid").rows[i].cells[j].innerHTML = $scope.capabilitiesList[comp].name
+              }
+              else {
+                document.getElementById("grid").rows[i].cells[j].innerHTML = "No Capability"
+              }
+            }
           }
         }
       }
@@ -195,7 +198,7 @@
       </tr>
       <tr ng-repeat="component in componentsList">
         <th>{{component.name}}</th>
-        <th ng-repeat="attribute in attributesList"></th>
+        <td ng-repeat="attribute in attributesList"><a href="" ng-show="capabilityPage"></a></td>
       </tr>
     </table>
     <h4><a href="" ng-click="edit_table=true" ng-hide="edit_table">Edit Table</a></h4>
@@ -239,9 +242,6 @@
         </tr>
       </table><br>
       <button ng-click="edit_table=false" ng-show="edit_table">Close</a>
-    </div>
-    <div>
-      <a href="" ng-click="fillTable(2,1)">Fill table</a>
     </div>
   </div>
   <div class="capability_form" ng-show="showcapability">
