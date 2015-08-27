@@ -23,10 +23,19 @@ ActiveRecord::Schema.define(version: 20150819210813) do
 
   create_table "capabilities", force: :cascade do |t|
     t.string  "name"
+    t.integer "project_id"
+    t.integer "result_id"
+    t.string  "code"
+    t.string  "url"
+    t.string  "oauth"
+    t.boolean "last_result"
+  end
+
+  create_table "capability_maps", force: :cascade do |t|
+    t.integer "project_id"
     t.integer "attribute_id"
     t.integer "component_id"
-    t.integer "project_id"
-    t.boolean "active"
+    t.integer "capability_id"
   end
 
   create_table "components", force: :cascade do |t|

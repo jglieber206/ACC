@@ -6,6 +6,7 @@ require './models/project'
 require './models/attribute'
 require './models/component'
 require './models/capability'
+require './models/capability_map'
 require 'pg'
 require 'json'
 
@@ -91,12 +92,16 @@ end
 ## Capability functions ##
 ##########################
 
-## get specific capability
-get '/projects/:id/capability/:attr_id/:comp_id' do
-  Capability.where(attribute_id: params['attr_id'], component_id: params['comp_id']).to_json
-end
-
 ## get all capabilities for a project
 get '/projects/:id/capabilities' do
   Capability.where(project_id: params['id']).all.to_json
+end
+
+###################
+## Map functions ##
+###################
+
+## get map
+get '/projects/:id/capability_maps' do
+  CapabilityMap.where(project_id: params['id']).all.to_json
 end

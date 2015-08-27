@@ -17,7 +17,11 @@
           .success(function(response) { $scope.projectList = response })
           .error(function() { console.log("error") });
         }
+
         // Project methods
+
+
+
         $scope.openProject = function(id) {
           $scope.project = []
           $http({
@@ -27,6 +31,11 @@
           .success(function(response) { $scope.project = response })
           .error(function() { console.log("error") })
         }
+
+
+
+
+
         $scope.addProject = function() {
           $http({
             method: 'POST',
@@ -99,28 +108,16 @@
           .error(function() { console.log("error") })
         }
         // Capability methods
-        $scope.capabilitiesList = []
+        $scope.projectCapabilities = []
         $scope.getCapabilities = function(id) {
           $http({
             method: 'GET',
             url: '/projects/' + id + '/capabilities'
           })
-          .success(function(response) { $scope.capabilitiesList = response; $scope.fillTable() })
+          .success(function(response) { $scope.projectCapabilities = response; $scope.fillTable() })
           .error(function() { console.log("error returning capabilities") })
         }
-        $scope.getCapability = function(id, attribute_id, component_id) {
-          $http({
-            method: 'GET',
-            url: '/projects/' + id + '/capability/' + attribute_id + '/' + component_id
-          })
-        }
-        // $scope.addCapability = function(id) {
-        //   $http({
-        //     method: 'POST',
-        //     url: '/projects/' + id + '/capabilities',
-        //     data: { name: this.capabilityName, attribute_id: this.capabilityAttr this.capabilityComp, project_id: id }
-        //   })
-        // }
+
         $scope.deleteCapability = function(id) {
           $http({
             method: 'DELETE',
@@ -129,41 +126,54 @@
           .success(function() { console.log("Capability deleted") })
           .error(function() { console.log("error deleting capability") })
         }
-
-
+        $scope.projectMaps = [];
+        $scope.getMap = function(id) {
+          $http({
+            method: 'GET',
+            url: '/projects/' + id + '/capability_maps'
+          }).success(function(response) { $scope.projectMaps = response });
+        }
 
         // Fill table
+
+
         $scope.fillTable = function() {
           table = document.getElementById("grid");
-          numberRows = table.rows
-          var tmp;
+          numberRows = table.rows;
           function getById(id, myArray) {
             myArray.filter(function(obj) {
               if(obj.id == id) {
-                tmp = myArray.indexOf(obj)
-                console.log("tmp=" + tmp)
+                tmp = myArray.indexOf(obj);
               }
-            })
-            return tmp
+            });
+            return tmp;
           };
-          for (var i = 1; i < numberRows.length; i++) {
-            for (var j = 1; j < numberRows[i].cells.length; j++) {
-              var comp_id = $scope.componentsList[i-1].id;
-              var attr_id = $scope.attributesList[j-1].id;
-
-              comp = getById(comp_id, $scope.capabilitiesList);
-              attr = getById(attr_id, $scope.capabilitiesList);
-              console.log("comp = " + comp);
-              console.log("attr = " + attr);
-              if (comp == attr) {
-                document.getElementById("grid").rows[i].cells[j].innerHTML = $scope.capabilitiesList[comp].name
+          console.log("attributeList.length: " + $scope.attributesList.length);
+          console.log("projectMaps.length: " + $scope.projectMaps.length);
+          function cellCapabilities(attr, comp) {
+            var capsInCell = [];
+            for (var i = 0; i < $scope.projectMaps.length; i++) {
+              if ($scope.projectMaps[i].attribute_id == $scope.attributesList[attr].id && $scope.projectMaps[i].component_id == $scope.componentsList[comp].id) {
+                cap = getById($scope.projectMaps[i].capability_id, $scope.projectCapabilities);
+                capsInCell.push(cap);
               }
-              else {
-                document.getElementById("grid").rows[i].cells[j].innerHTML = "No Capability"
-              }
+            }
+            console.log("attr: "+attr+" comp: "+comp+" capsInCell.length: "+capsInCell.length)
+            return capsInCell;
+          }
+          for (var r = 1; r < numberRows.length; r++) {
+            for (var c = 1; c < numberRows[r].cells.length; c++) {
+              var comp_id = $scope.componentsList[r-1].id;
+              var attr_id = $scope.attributesList[c-1].id;
+              comp = getById(comp_id, $scope.projectCapabilities);
+              attr = getById(attr_id, $scope.projectCapabilities);
+              console.log("comp: "+comp+" attr: "+attr)
+              myCaps = cellCapabilities(attr, comp);
+              document.getElementById("grid").rows[r].cells[c].innerHTML = myCaps.length;
             }
           }
         }
+
       }
     ]);
 
@@ -174,7 +184,7 @@
     <h2>Project list</h2>
     <table class="list">
       <tr ng-repeat="project in projectList">
-        <th><a href="" ng-click="openProject(project.id); getAttributes(project.id); getComponents(project.id); getCapabilities(project.id)">{{project.name}} </a></th>
+        <th><a href="" ng-click="openProject(project.id); getAttributes(project.id); getComponents(project.id); getCapabilities(project.id); getMap(project.id); fillTable()">{{project.name}} </a></th>
         <td><a href="" ng-click="deleteProject(project.id)">Delete</a></td>
       </tr>
       <th colspan="2"><a href="" ng-click="showform=true" ng-hide="showform">Add</a></th>
