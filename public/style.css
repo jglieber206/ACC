@@ -83,3 +83,20 @@ input[type=submit] {
   border-collapse: collapse;
   display: inline-block;
 }
+#table_header {
+  text-align: center;
+}
+
+/* capabilities */
+#capability_form {
+  border: 1px solid black;
+  border-collapse: collapse;
+  margin-left: 40%;
+  margin-right: auto;
+  text-align: center;
+  width: 50%;
+}
+#capability_form th, #capability_form td {
+  border: 1px solid black;
+  padding: 20px;
+}
