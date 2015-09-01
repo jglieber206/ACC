@@ -15,7 +15,7 @@ accApp.controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
       $http({
         method: 'GET',
         url: '/projects/' + id
-      }).success(function(response) { $scope.project = response; $scope.getAttributes(id); $scope.getComponents(id); $scope.getProjectCapabilities(id); $scope.getMap(id); $scope.fillTable() })
+      }).success(function(response) { $scope.project = response; $scope.getAttributes(id); $scope.getComponents(id); $scope.getProjectCapabilities(id); $scope.getMap(id) })
       .error(function() { console.log("error") });
     }
     $scope.addProject = function() {
@@ -90,7 +90,7 @@ accApp.controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
       $http({
         method: 'GET',
         url: '/projects/' + id + '/capabilities'
-      }).success(function(response) { $scope.projectCapabilities = response; $scope.fillTable() })
+      }).success(function(response) { $scope.projectCapabilities = response })
       .error(function() { console.log("error returning capabilities") });
     }
     // $scope.addCapability = function(proj_id, attr_id, comp_id) {
@@ -126,16 +126,18 @@ accApp.controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
     and the array of all hits is returned.
     */
     $scope.capsInCell = [];
-    $scope.getCellCapabilities = function(attr, comp) {
+    $scope.getCellCapabilities = function(attr_id, comp_id) {
       var capsInCell = [];
+      attrIndex = getById(attr_id, $scope.attributesList);
+      compIndex = getById(comp_id, $scope.componentsList);
       for (var i = 0; i < $scope.projectMaps.length; i++) {
-        if ($scope.projectMaps[i].attribute_id == $scope.attributesList[attr].id && $scope.projectMaps[i].component_id == $scope.componentsList[comp].id) {
+        if ($scope.projectMaps[i].attribute_id == $scope.attributesList[attrIndex].id && $scope.projectMaps[i].component_id == $scope.componentsList[compIndex].id) {
           cap = getById($scope.projectMaps[i].capability_id, $scope.projectCapabilities);
           capsInCell.push($scope.projectCapabilities[cap]);
         }
       }
+      // console.log("myCaps: "+capsInCell.length+" myCaps[0]: "+capsInCell[0].name)
       $scope.capsInCell = capsInCell;
-      console.log("$scope.capsInCell: " + $scope.capsInCell.length)
       return capsInCell;
     }
     /*
@@ -151,37 +153,53 @@ accApp.controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
       });
       return myIndex;
     };
+    $scope.displayLink = function(attr_id, comp_id) {
+      myLink = $scope.getCellCapabilities(attr_id, comp_id);
+      return myLink.length;
+    }
+    // $scope.buildCapList = function(attr, comp, caps) {
+    //   // call getCellCapabilities, loop thru each one to display stuff in section
+    //   currentAttribute = $scope.attributesList[attr];
+    //   currentComponent = $scope.componentsList[comp];
+    //   capList = "<tr><th>Attribute: " + currentAttribute.name + "</th><th>Component: " + currentComponent.name + "</th></tr>";
+    //   names = "names: ";
+    //   for (var i = 0; i < caps.length; i++) {
+    //     tmp = "<tr><th>"+caps[i].name +"</th></tr>";
+    //     console.log("myCaps: " + caps[i].name)
+    //     names += caps[i].name + ",";
+    //     capList += tmp;
+    //     document.getElementById("caps").innerHTML = capList;
+    //   }
+    //   names += " total: " + caps.length;
+    //   console.log("currentAttribute: "+currentAttribute.name+" currentComponent: "+currentComponent.name +" "+names);
+    //   document.getElementById("caps").innerHTML = capList;
+    // }
+
+
     // Fill table
-    $scope.fillTable = function() {
-      table = document.getElementById("grid");
-      numberRows = table.rows;
-      console.log("attributeList.length: " + $scope.attributesList.length);
-      console.log("projectMaps.length: " + $scope.projectMaps.length);
+    // $scope.fillTable = function() {
+    //   table = document.getElementById("grid");
+    //   numberRows = table.rows;
+    //   console.log("attributeList.length: " + $scope.attributesList.length);
+    //   console.log("projectMaps.length: " + $scope.projectMaps.length);
+    //
+    //
+    //   for (var r = 1; r < numberRows.length; r++) {
+    //     for (var c = 1; c < numberRows[r].cells.length; c++) {
+    //       var comp_id = $scope.componentsList[r-1].id;
+    //       var attr_id = $scope.attributesList[c-1].id;
+    //       comp = getById(comp_id, $scope.projectCapabilities);
+    //       attr = getById(attr_id, $scope.projectCapabilities);
+    //       // console.log("comp: "+comp+" attr: "+attr)
+    //       myCaps = $scope.getCellCapabilities(attr, comp);
+    //       // console.log("comp: "+comp+" attr: "+attr+" myCaps.length: "+myCaps.length);
+    //       // capLink = "<a href=\"\" ng-click=\"showcapability=true;"+$scope.buildCapList(attr, comp, myCaps)+"\">" + myCaps.length + "</a>";
+    //       document.getElementById("grid").rows[r].cells[c].innerHTML = makeLink(attr, comp, myCaps);
+    //       // $scope.buildCapList(currentAttribute, currentComponent);
+    //       // document.getElementById("caps").innerHTML =
+    //     }
+    //   }
+    // }
 
-      for (var r = 1; r < numberRows.length; r++) {
-        for (var c = 1; c < numberRows[r].cells.length; c++) {
-          var comp_id = $scope.componentsList[r-1].id;
-          var attr_id = $scope.attributesList[c-1].id;
-          comp = getById(comp_id, $scope.projectCapabilities);
-          attr = getById(attr_id, $scope.projectCapabilities);
-          // console.log("comp: "+comp+" attr: "+attr)
-          myCaps = $scope.getCellCapabilities(attr, comp);
-          console.log("comp: "+comp+" attr: "+attr+" myCaps.length: "+myCaps.length);
-          currentAttribute = $scope.attributesList[attr];
-          currentComponent = $scope.componentsList[comp];
-          capLink = "<a href=\"\" ng-click=\"buildCapList("+currentAttribute+","+ currentComponent+")\">" + myCaps.length + "</a>";
-          document.getElementById("grid").rows[r].cells[c].innerHTML = capLink;
-          // $scope.buildCapList(currentAttribute, currentComponent);
-          // document.getElementById("caps").innerHTML =
-        }
-      }
-    }
-    $scope.buildCapList = function (attr, comp) {
-      capList = "<tr><th>Attribute: " + attr.name + "</th><th>Component: " + comp.name + "</th></tr>";
-      capList += "<tr ng-repeat=\"capability in capsInCell\"><th>{{capability.name}}</th></tr>"
-
-      console.log("currentAttribute: "+currentAttribute.name+" currentComponent: "+currentComponent.name)
-      // document.getElementById("caps").innerHTML = capList;
-    }
   }
 ]);

@@ -36,7 +36,7 @@
       </tr>
       <tr ng-repeat="component in componentsList">
         <th>{{component.name}}</th>
-        <td ng-repeat="attribute in attributesList"></td>
+        <td ng-repeat="attribute in attributesList"><a href="" ng-click="showcapability=true; getCellCapabilities(attribute.id, component.id); ">{{displayLink(attribute.id, component.id)}}</a></td>
       </tr>
     </table>
     <h4><a href="" ng-click="edit_table=true" ng-hide="edit_table">Edit Table</a></h4>
@@ -83,15 +83,20 @@
     </div>
     <!-- <h4><a href="" ng-click="showcapability=true" ng-hide="showcapability">Capability Form</a></h4> -->
     <div id="capability_form">
-      <h3>Capabilities:</h3>
-      <table id="caps">
-        <tr ng-repeat="capability in capsInCell">
-          <th>{{capability.name}}</th>
-        </tr>
-      </table>
-      <form>
+      <div ng-hide="showcapability">
+        <h3>hidden</h3>
+      </div>
+      <div ng-show="showcapability">
+        <h3>Capabilities:</h3>
+        <table id="caps">
+          <!-- <tr ng-repeat="capability in capsInCell">
+            <th>{{capability.name}}</th>
+          </tr> -->
+        </table>
+        <form>
 
-      </form>
+        </form>
+      </div>
     </div>
   </div>
   <div>
