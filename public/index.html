@@ -27,7 +27,7 @@
       </tr>
     </table>
   </div>
-  <div class="project" ng-init="openProject(1); getAttributes(1); getComponents(1)">
+  <div class="project" ng-model="showcapability" ng-init="openProject(1); getAttributes(1); getComponents(1); showCaps=false">
     <h1>{{project.name}}</h1>
     <table id="grid">
       <tr>
@@ -36,7 +36,7 @@
       </tr>
       <tr ng-repeat="component in componentsList">
         <th>{{component.name}}</th>
-        <td ng-repeat="attribute in attributesList"><a href="" ng-click="showcapability=true; getCellCapabilities(attribute.id, component.id); ">{{displayLink(attribute.id, component.id)}}</a></td>
+        <td ng-repeat="attribute in attributesList"><a href="" ng-model="showCaps" ng-click="cellCapList(getCellCapabilities(attribute.id, component.id)); getCurrentAttr(attribute.id); getCurrentComp(component.id)" >{{getCellCapabilities(attribute.id, component.id).length}}</a></td>
       </tr>
     </table>
     <h4><a href="" ng-click="edit_table=true" ng-hide="edit_table">Edit Table</a></h4>
@@ -81,26 +81,28 @@
       </table><br>
       <button ng-click="edit_table=false" ng-show="edit_table">Close</a>
     </div>
-    <!-- <h4><a href="" ng-click="showcapability=true" ng-hide="showcapability">Capability Form</a></h4> -->
+    <h4><a href="" ng-model="showCaps" ng-click="toggleShow(showCaps)">Capability Form</a></h4>
     <div id="capability_form">
-      <div ng-hide="showcapability">
-        <h3>hidden</h3>
-      </div>
-      <div ng-show="showcapability">
+      <div>
         <h3>Capabilities:</h3>
-        <table id="caps">
-          <!-- <tr ng-repeat="capability in capsInCell">
-            <th>{{capability.name}}</th>
-          </tr> -->
+        <table class="caps">
+          
+          <tr ng-repeat="capability in capsInCell">
+            <th colspan="2"><a href="" ng-click="showDetails=true">{{capability.name}}</a></th>
+          </tr>
         </table>
+        <h4><a href="" ng-click="toggleShow(showCaps)">Close</a></h4>
+        <div ng-if="showDetails">
+          <h3>Details!</h3>
+        </div>
         <form>
 
         </form>
       </div>
     </div>
   </div>
-  <div>
-
+  <div ng-if="showDetails">
+    <h1>hello</h1>
   </div>
 </body>
 </html>

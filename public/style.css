@@ -96,7 +96,13 @@ input[type=submit] {
   text-align: center;
   width: 50%;
 }
-#capability_form th, #capability_form td {
+.caps th, .caps td {
   border: 1px solid black;
   padding: 20px;
+  width: 50%;
+}
+.caps {
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 20px;
 }
