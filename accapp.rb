@@ -9,8 +9,17 @@ require './models/capability'
 require './models/capability_map'
 require 'pg'
 require 'json'
+require 'rufus-scheduler'
+require './helpers/result_fetcher'
 
 set :public_folder, File.dirname(__FILE__) + '/public'
+
+@@fetcher = ResultFetcher.new
+@@scheduler = Rufus::Scheduler.new
+@@scheduler.every '5m' do
+  @@fetcher.run
+end
+
 
 ###############################################
 ## Project list & general endpoint functions ##
@@ -116,11 +125,14 @@ post '/attributes/:attr_id/components/:comp_id' do
   proj_id = Attribute.where(id: params['attr_id']).project_id
   new_capability = Capability.new(name: capName, project_id: proj_id, code: capCode, url: capUrl, oauth: capAuth)
   new_capability.save
+  @@fetcher.add(new_capabilty)
   new_projectMap = ProjectMap.new(project_id: proj_id, attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id)
 end
 
 ## update capability
 # update '/capabilities/:id' do
+#
+# @@fetcher.add(capability) ???
 #
 # end
 
