@@ -85,10 +85,26 @@
     <div id="capability_form">
       <div>
         <h3>Capabilities:</h3>
-        <table class="caps">
-          
-          <tr ng-repeat="capability in capsInCell">
-            <th colspan="2"><a href="" ng-click="showDetails=true">{{capability.name}}</a></th>
+        <table class="caps" ng-repeat="capability in capsInCell">
+          <tr>
+            <th>Name: </th>
+            <td ng-model="capability">{{capability.name}}</th>
+          </tr>
+          <tr>
+            <td>Result ID: </td>
+            <td>{{capability.result_id}}</td>
+          </tr>
+          <tr>
+            <td>Code: </td>
+            <td>{{capability.code}}</td>
+          </tr>
+          <tr>
+            <td>URL: </td>
+            <td>{{capability.url}}</td>
+          </tr>
+          <tr>
+            <td>Success? </td>
+            <td>{{capability.last_result}}</td>
           </tr>
         </table>
         <h4><a href="" ng-click="toggleShow(showCaps)">Close</a></h4>
