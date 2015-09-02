@@ -27,7 +27,7 @@ class ResultFetcher
     @to_do.each do |id, capability|
       test_result = fetch(capability.url)
       result = begin
-                 true == ExecJS.eval("#{capability.code}(#{test_result})")
+                 true == ExecJS.eval("res = JSON.parse(#{test_result});#{capability.code};")
                rescue
                  false
                end
