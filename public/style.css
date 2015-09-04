@@ -60,7 +60,6 @@ input[type=submit] {
 }
 #grid {
   border-collapse: collapse;
-  float: middle;
   margin-left: auto;
   margin-right: auto;
   padding-left: 100px;
@@ -96,13 +95,20 @@ input[type=submit] {
   text-align: center;
   width: 50%;
 }
-.caps th, .caps td {
-  border: 1px solid black;
+.caps th {
   padding: 5px;
-  width: 50%;
+  text-align: right;
+  width: 30%;
+}
+.caps td {
+  border: 1px solid black;
+  overflow: scroll;
+  width: 70%;
 }
 .caps {
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 20px;
+  margin-right: 20px;
   padding-bottom: 20px;
+  table-layout: fixed;
+  width: 80%;
 }

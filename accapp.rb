@@ -16,7 +16,7 @@ set :public_folder, File.dirname(__FILE__) + '/public'
 
 @@fetcher = ResultFetcher.new
 @@scheduler = Rufus::Scheduler.new
-@@scheduler.every '5m' do
+@@scheduler.every '30s' do
   @@fetcher.run
 end
 
