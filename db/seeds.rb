@@ -16,9 +16,9 @@ Component.create(name: "love index", project_id: 2)
 Component.create(name: "marketing", project_id: 3)
 Component.create(name: "sales", project_id: 3)
 
-def create_capability(name: project_id:)
-  seed_url = 'http://www.nist.gov/srd/srd_data/srd13_janaf-data-defs.json'
-  seed_code = '["identifiers"]["chemical name"] == "Aluminum"'
+def create_capability(name:, project_id:)
+  seed_url = 'http://jenkins.corp.apptentive.com/view/Test%20-%20Platform/job/Platform_Build_on_Merge_to_Master/lastBuild/api/json?pretty=true'
+  seed_code = '["result"] === "SUCCESS"'
   Capability.create(name: name,
                     project_id: project_id,
                     code: seed_code,
@@ -28,7 +28,7 @@ def create_capability(name: project_id:)
 end
 
 create_capability(name: "c1", project_id: 1)
-create_capability(name: "c2", project_id: 1,
+create_capability(name: "c2", project_id: 1)
 create_capability(name: "c3", project_id: 2)
 create_capability(name: "c4", project_id: 2)
 create_capability(name: "c5", project_id: 3)
@@ -77,17 +77,3 @@ CapabilityMap.create(project_id: 2,
   attribute_id: 4,
   component_id: 3,
   capability_id: 4)
-
-# CapabilityMap layout
-# id    proj    attr    comp    cap
-# 1     1       1       1       1
-# 2     1       1       1       2
-# 3     1       1       2       1
-# 4     1       2       1       2
-# 5     1       2       2       2
-# _________________________________
-# 6     2       3       3       4
-# 7     2       3       4       3
-# 8     2       3       4       4
-# 9     2       4       3       3
-# 10    2       4       3       4

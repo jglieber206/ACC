@@ -27,7 +27,7 @@
       </tr>
     </table>
   </div>
-  <div class="project" ng-model="showcapability" ng-init="openProject(1); getAttributes(1); getComponents(1); showCaps=false">
+  <div class="project" ng-init="openProject(1); getAttributes(1); getComponents(1)">
     <h1>{{project.name}}</h1>
     <table id="grid">
       <tr>
@@ -36,7 +36,7 @@
       </tr>
       <tr ng-repeat="component in componentsList">
         <th>{{component.name}}</th>
-        <td ng-repeat="attribute in attributesList"><a href="" ng-model="showCaps" ng-click="cellCapList(getCellCapabilities(attribute.id, component.id)); getCurrentAttr(attribute.id); getCurrentComp(component.id)" >{{getCellCapabilities(attribute.id, component.id).length}}</a></td>
+        <td ng-repeat="attribute in attributesList" ng-style="{'background-color': cellColor}"><button ng-click="cellCapList(getCellCapabilities(attribute.id, component.id)); showCapList(); textStyle={'color': cellColor}" >{{getCellCapabilities(attribute.id, component.id).length}}</button></td>
       </tr>
     </table>
     <h4><a href="" ng-click="edit_table=true" ng-hide="edit_table">Edit Table</a></h4>
@@ -56,7 +56,7 @@
               New Attribute Name:<br>
               <input ng-model="newAttribute" type="text"><br>
               <input type="submit" value="Add Attribute" ng-click="addAttr=true"><br>
-              <a href="" ng-click="addAttr=false">Cancel</a>
+              <button ng-click="addAttr=false">Cancel</button>
           </form>
         </tr>
       </table>
@@ -66,7 +66,7 @@
         </tr>
         <tr ng-repeat="component in componentsList">
           <td>{{component.name}}</td>
-          <td><a href="" ng-click="deleteComponent(component)">Remove</a></td>
+          <td><a href="" ng-click="deleteComponent(component.id)">Remove</a></td>
         </tr>
         <th colspan="2"><a href="" ng-click="addComp=true" ng-hide="addComp">Add</a></th>
         <tr ng-show="addComp">
@@ -75,34 +75,54 @@
               New Component Name:<br>
               <input ng-model="newComponent" type="text"><br>
               <input type="submit" value="Add Component" ng-click="addComp=true"><br>
-              <a href="" ng-click="addComp=false">Cancel</a>
+              <button ng-click="addComp=false">Cancel</button>
           </form>
         </tr>
       </table><br>
-      <button ng-click="edit_table=false" ng-show="edit_table">Close</a>
+      <button ng-click="edit_table=false" ng-show="edit_table">Close</button>
     </div>
-    <h4><a href="" ng-model="showCaps" ng-click="toggleShow(showCaps)">Capability Form</a></h4>
-    <div id="capability_form">
-      <div>
-        <h3>Capabilities:</h3>
+    <!-- <h4><a href="" ng-click="toggleShow(showCaps)">Capability Form</a></h4> -->
+    <div id="capability_form" ng-if="showCaps">
+      <h3>Capabilities:</h3>
+      <table class="caps" ng-repeat="capability in capsInCell">
+        <tr>
+          <th>Name:</th>
+          <td ng-model="capability">{{capability.name}}</th>
+        </tr>
+        <tr>
+          <th>Result ID:</th>
+          <td>{{capability.result_id}}</td>
+        </tr>
+        <tr>
+          <th>Code:</th>
+          <td>{{capability.code}}</td>
+        </tr>
+        <tr>
+          <th>URL:</th>
+          <td>{{capability.url}}</td>
+        </tr>
+        <tr>
+          <th>Success? </th>
+          <td ng-style="textStyle">{{capability.last_result}}</td>
+        </tr>
+        <tr>
+          <th><button ng-click="deleteCapability(capability.id)">Delete Capability</button></th>
+          <th><button ng-click="editCapability(capability_id)">Edit Capability</button></th>
+        </tr>
+      </table>
+      <p><a href="" ng-click="addCap=true" ng-hide="addCap">Add</a></p>
+      <form class="caps" ng-show="addCap">
         <table class="caps">
-          
-          <tr ng-repeat="capability in capsInCell">
-            <th colspan="2"><a href="" ng-click="showDetails=true">{{capability.name}}</a></th>
-          </tr>
+          <p>Name:  <input float="right" g-model="newCapName" type="text"></p>
+          <p>Code:  <input float="right" ng-model="newCapCode" type="text"></p>
+          <p>Url:   <input float="right" ng-model="newCapUrl" type="text"></p>
+          <p>Oauth: <input float="right" ng-model="newCapOauth" type="text"></p>
+          <input type="submit" value="Add Capability"><br>
+          <button ng-click="addCap=false">Cancel</button>
         </table>
-        <h4><a href="" ng-click="toggleShow(showCaps)">Close</a></h4>
-        <div ng-if="showDetails">
-          <h3>Details!</h3>
-        </div>
-        <form>
-
-        </form>
-      </div>
+      </form>
+      <button ng-click="hideCapList()" ng-if="showCaps">Close</button>
     </div>
-  </div>
-  <div ng-if="showDetails">
-    <h1>hello</h1>
   </div>
 </body>
 </html>
