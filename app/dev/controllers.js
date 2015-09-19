@@ -1,5 +1,8 @@
-var accApp = angular.module('accApp', []);
-accApp.controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
+var angular = require('angular');
+var app = require('./app.js')
+
+app.controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
+
     $scope.projectList = [];
     $scope.getProjects = function() {
       $http({

@@ -3,10 +3,10 @@
 <head>
   <title>Projects list</title>
   <link rel="stylesheet" type="text/css" href="/style.css">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+  <script type="text/javascript" src="./bundle.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
-  <script type="text/javascript" src="/layout.js"></script>
 </head>
+
 <body ng-controller="ProjectCtrl">
   <div class="sidebar" ng-init="getProjects()">
     <h2>Project list</h2>
@@ -27,6 +27,7 @@
       </tr>
     </table>
   </div>
+
   <div class="project" ng-init="openProject(1); getAttributes(1); getComponents(1)">
     <h1>{{project.name}}</h1>
     <table id="grid">
