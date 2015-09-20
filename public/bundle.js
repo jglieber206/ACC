@@ -44,8 +44,12 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(1)
-	__webpack_require__ (4)();
+	__webpack_require__(1);
+	__webpack_require__(4);
+	__webpack_require__(5);
+	__webpack_require__(6)
+	__webpack_require__(9);
+	__webpack_require__(8);
 
 
 /***/ },
@@ -28902,108 +28906,201 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var angular = __webpack_require__(2);
+	var app = __webpack_require__(1);
+	
+	var appController = app.controller('appController', ['$http', '$rootScope', function ($http, $rootScope) {
+	
+	  $rootScope.attributesList = [];
+	  $rootScope.componentsList = [];
+	  $rootScope.projectCapabilities = [];
+	  $rootScope.projectMaps = [];
+	
+	  $rootScope.getAttributes = function(id) {
+	    $http({
+	      method: 'GET',
+	      url: '/projects/' + id + '/attributes'
+	    }).success(function(response) { $rootScope.attributesList = response })
+	    .error(function() { console.log("error") });
+	  }
+	
+	  $rootScope.getComponents = function(id) {
+	    $http({
+	      method: 'GET',
+	      url: '/projects/' + id + '/components'
+	    }).success(function(response) { $rootScope.componentsList = response })
+	    .error(function() { console.log("error") });
+	  }
+	
+	  $rootScope.getCurrentComp = function(comp_id) {
+	    compIndex = getIndexById(comp_id, $rootScope.componentsList)
+	    $rootScope.currentComponent = $rootScope.componentsList[compIndex]
+	  }
+	
+	  $rootScope.getProjectCapabilities = function(id) {
+	    $http({
+	      method: 'GET',
+	      url: '/projects/' + id + '/capabilities'
+	    }).success(function(response) { $rootScope.projectCapabilities = response })
+	    .error(function() { console.log("error returning capabilities") });
+	  }
+	
+	  $rootScope.getMap = function(id) {
+	    $http({
+	      method: 'GET',
+	      url: '/projects/' + id + '/capability_maps'
+	    }).success(function(response) { $rootScope.projectMaps = response });
+	  }
+	
+	}])
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+	var app = __webpack_require__(1);
+	
+	
+	app.controller('AttributesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+	
+	  $scope.addAttribute = function(id) {
+	    $http({
+	      method: 'POST',
+	      url: '/projects/' + id + '/attributes',
+	      data: this.newAttribute
+	    }).success(function() {
+	      $scope.openProject(id)
+	     })
+	    .error(function() { console.log("error") });
+	  }
+	  $scope.deleteAttribute = function(databaseid) {
+	    $http({
+	      method: 'DELETE',
+	      url: '/attributes/' + databaseid
+	    }).success(function() {
+	      var index = $rootScope.attributesList.map(function(e) { return e.id; }).indexOf(databaseid);
+	      $rootScope.attributesList.splice(index, 1);
+	    })
+	    .error(function() { console.log("error") });
+	  }
+	
+	}]);
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+	var app = __webpack_require__(1);
+	
+	
+	app.controller('ComponentsController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+	
+	  $scope.addComponent = function(id) {
+	    $http({
+	      method: 'POST',
+	      url: '/projects/' + id + '/components',
+	      data: this.newComponent
+	    }).success(function() {
+	      $scope.openProject(id)
+	    })
+	    .error(function() { console.log("error") });
+	  }
+	  $scope.deleteComponent = function(databaseid) {
+	    $http({
+	      method: 'DELETE',
+	      url: '/components/' + databaseid
+	    }).success(function() {
+	      var index = $rootScope.componentsList.map(function(e) { return e.id; }).indexOf(databaseid);
+	      $rootScope.componentsList.splice(index, 1);
+	    })
+	    .error(function() { console.log("error") });
+	  }
+	
+	
+	}]);
+
+
+/***/ },
+/* 7 */,
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
+	var app = __webpack_require__(1);
+	
+	var projectsListController = app.controller('ProjectsListController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+	
+	  $scope.projectList = [];
+	  $scope.project = [];
+	
+	  $scope.getProjects = function() {
+	    $http({
+	      method: 'GET',
+	      url: '/projects'
+	    }).success(function(response) {
+	      $scope.projectList = response;
+	    })
+	    .error(function() { console.log("error") });
+	  }
+	
+	  $scope.openProject = function(id) {
+	    $http({
+	      method: 'GET',
+	      url: '/projects/' + id
+	    }).success(function(response) {
+	      $scope.project = response;
+	      $rootScope.getAttributes(id);
+	      $rootScope.getComponents(id);
+	      $rootScope.getProjectCapabilities(id);
+	      $rootScope.getMap(id);
+	    })
+	    .error(function() { console.log("error") });
+	  }
+	  $scope.addProject = function() {
+	    $http({
+	      method: 'POST',
+	      url: '/projects',
+	      data: this.newProject
+	    }).success(function() {
+	      $scope.getProjects();
+	    })
+	    .error(function() { console.log("error") });
+	  }
+	  $scope.deleteProject = function(id) {
+	    $http({
+	      method: 'DELETE',
+	      url: '/projects/' + id
+	    }).success(function() {
+	      $scope.getProjects();
+	    })
+	    .error(function() { console.log("error") });
+	  }
+	
+	}]);
+	
+	module.exports = projectsListController;
+
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var angular = __webpack_require__(2);
 	var app = __webpack_require__(1)
 	
-	app.controller('ProjectCtrl', ['$scope', '$http', function ($scope, $http) {
+	app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
 	
-	    $scope.projectList = [];
-	    $scope.getProjects = function() {
-	      $http({
-	        method: 'GET',
-	        url: '/projects'
-	      }).success(function(response) { $scope.projectList = response })
-	      .error(function() { console.log("error") });
-	    }
+	    var my_attr = "";
+	    var my_comp = "";
 	
-	    // Project methods
-	    $scope.project = [];
-	    $scope.openProject = function(id) {
-	      $http({
-	        method: 'GET',
-	        url: '/projects/' + id
-	      }).success(function(response) { $scope.project = response; $scope.getAttributes(id); $scope.getComponents(id); $scope.getProjectCapabilities(id); $scope.getMap(id) })
-	      .error(function() { console.log("error") });
-	    }
-	    $scope.addProject = function() {
+	    $scope.addCapability = function(proj_id) {
 	      $http({
 	        method: 'POST',
-	        url: '/projects',
-	        data: this.newProject
-	      }).success(function() { console.log("added project!") })
-	      .error(function() { console.log("error") });
-	    }
-	    $scope.deleteProject = function(id) {
-	      $http({
-	        method: 'DELETE',
-	        url: '/projects/' + id
-	      }).success(function(project) { console.log(project) })
-	      .error(function() { console.log("error") });
-	    }
-	
-	    // Attribute methods
-	    $scope.attributesList = [];
-	    $scope.getAttributes = function(id) {
-	      $http({
-	        method: 'GET',
-	        url: '/projects/' + id + '/attributes'
-	      }).success(function(response) { $scope.attributesList = response })
-	      .error(function() { console.log("error") });
-	    }
-	    $scope.addAttribute = function(id) {
-	      $http({
-	        method: 'POST',
-	        url: '/projects/' + id + '/attributes',
-	        data: this.newAttribute
-	      }).success(function() { console.log("Added attribute") })
-	      .error(function() { console.log("error") });
-	    }
-	    $scope.deleteAttribute = function(id) {
-	      $http({
-	        method: 'DELETE',
-	        url: '/attributes/' + id
-	      }).success(function() { console.log("Attribute deleted") })
-	      .error(function() { console.log("error") });
-	    }
-	
-	    // Component methods
-	    $scope.componentsList = [];
-	    $scope.getComponents = function(id) {
-	      $http({
-	        method: 'GET',
-	        url: '/projects/' + id + '/components'
-	      }).success(function(response) { $scope.componentsList = response })
-	      .error(function() { console.log("error") });
-	    }
-	    $scope.addComponent = function(id) {
-	      $http({
-	        method: 'POST',
-	        url: '/projects/' + id + '/components',
-	        data: this.newComponent
-	      }).success(function() { console.log("added component!") })
-	      .error(function() { console.log("error") });
-	    }
-	    $scope.deleteComponent = function(id) {
-	      $http({
-	        method: 'DELETE',
-	        url: '/components/' + id
-	      }).success(function() { console.log("Component deleted") })
-	      .error(function() { console.log("error") });
-	    }
-	
-	    // Capability methods
-	    $scope.projectCapabilities = [];
-	    $scope.getProjectCapabilities = function(id) {
-	      $http({
-	        method: 'GET',
-	        url: '/projects/' + id + '/capabilities'
-	      }).success(function(response) { $scope.projectCapabilities = response })
-	      .error(function() { console.log("error returning capabilities") });
-	    }
-	    $scope.addCapability = function(proj_id, attr_id, comp_id) {
-	      $http({
-	        method: 'POST',
-	        url: '/projects/'+proj_id+'/attr/'+attr_id+'/comp/'+comp_id,
-	        data: { name: this.newCapName, attribute_id: attr_id, component_id: comp_id, project_id: proj_id }
+	        url: '/projects/'+proj_id+'/attributes/'+my_attr+'/components/'+my_comp,
+	        data: { name: this.newCapName, attribute_id: my_attr, component_id: my_comp, project_id: proj_id }
 	      }).success(function() { console.log("added capability!") })
 	      .error(function() { console.log("error adding capability") });
 	    }
@@ -29015,13 +29112,6 @@
 	      })
 	      .success(function() { console.log("Capability deleted") })
 	      .error(function() { console.log("error deleting capability") })
-	    }
-	    $scope.projectMaps = [];
-	    $scope.getMap = function(id) {
-	      $http({
-	        method: 'GET',
-	        url: '/projects/' + id + '/capability_maps'
-	      }).success(function(response) { $scope.projectMaps = response });
 	    }
 	
 	    $scope.getCellCapabilities = function(attr_id, comp_id) {
@@ -29035,16 +29125,23 @@
 	      $scope.colorCell(capsInCell);
 	      return capsInCell;
 	    }
+	
+	    $scope.setAttrAndComp = function(attr_id, comp_id) {
+	      console.log("****************: " + attr_id + "*********" + comp_id)
+	      my_attr = attr_id;
+	      my_comp = comp_id;
+	      console.log(my_attr);
+	      console.log(my_comp);
+	    }
+	
+	
 	    // $scope.currentAttribute = null;
 	    $scope.getCurrentAttr = function(attr_id) {
 	      attrIndex = getIndexById(attr_id, $scope.attributesList)
 	      $scope.currentAttribute = $scope.attributesList[attrIndex]
 	    }
 	    // $scope.currentComponent = null;
-	    $scope.getCurrentComp = function(comp_id) {
-	      compIndex = getIndexById(comp_id, $scope.componentsList)
-	      $scope.currentComponent = $scope.componentsList[compIndex]
-	    }
+	
 	    $scope.capsInCell = [];
 	    $scope.cellCapList = function(capabilities) {
 	      $scope.capsInCell = capabilities;
@@ -29053,7 +29150,7 @@
 	      var result = true;
 	      for (var i = 0; i < caps.length; i++) {
 	        tmp = caps[i].last_result;
-	        console.log("tmp: "+tmp+" Cap: "+caps[i].name)
+	        // console.log("tmp: "+tmp+" Cap: "+caps[i].name)
 	        result = result && tmp;
 	      }
 	      if (caps.length == 0){
@@ -29065,7 +29162,7 @@
 	      else if (!result) {
 	        $scope.cellColor = 'firebrick';
 	      }
-	      console.log("result: "+result)
+	      // console.log("result: "+result)
 	      // return $scope.cellColor;
 	    }
 	    /*
@@ -29084,11 +29181,11 @@
 	    };
 	    $scope.showCapList = function() {
 	      $scope.showCaps = true;
-	      console.log("showCaps: " + $scope.showCaps)
+	      // console.log("showCaps: " + $scope.showCaps)
 	    }
 	    $scope.hideCapList = function() {
 	      $scope.showCaps = false;
-	      console.log("showCaps: "+$scope.showCaps)
+	      // console.log("showCaps: "+$scope.showCaps)
 	    }
 	
 	  }
