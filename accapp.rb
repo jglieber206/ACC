@@ -126,11 +126,12 @@ post '/attributes/:attr_id/components/:comp_id' do
 end
 
 ## update capability
-# update '/capabilities/:id' do
-#
-# @@fetcher.add(capability) ???
-#
-# end
+post '/capabilities/update/:id' do
+  data = JSON.parse request.body.read
+  capability = Capability.find(params['id'])
+  capability.update(name: data['name'], code: data['code'], url: data['url'], oauth: data['oauth'])
+
+end
 
 delete '/capabilities/:id' do
   capability = Capability.find(params['id'])
