@@ -9,8 +9,8 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     $scope.addCapability = function(proj_id) {
       $http({
         method: 'POST',
-        url: '/projects/'+proj_id+'/attributes/'+my_attr+'/components/'+my_comp,
-        data: { name: this.newCapName, attribute_id: my_attr, component_id: my_comp, project_id: proj_id }
+        url: '/attributes/'+my_attr+'/components/'+my_comp,
+        data: { name: this.newCapName, project_id: proj_id, code: this.newCapCode, url: this.newCapUrl, oauth: this.newCapOauth }
       }).success(function() { console.log("added capability!") })
       .error(function() { console.log("error adding capability") });
     }
