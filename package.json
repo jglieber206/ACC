@@ -1,0 +1,25 @@
+{
+  "name": "ACC",
+  "version": "1.0.0",
+  "description": "ACC app",
+  "main": "webpack.config.js",
+  "dependencies": {
+    "angular": "^1.5.0-beta.0"
+  },
+  "devDependencies": {
+    "webpack": "^1.12.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apptentive/ACC.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/apptentive/ACC/issues"
+  },
+  "homepage": "https://github.com/apptentive/ACC"
+}
