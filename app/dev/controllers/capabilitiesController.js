@@ -15,6 +15,18 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       .error(function() { console.log("error adding capability") });
     }
 
+    $scope.updateCapability = function(capability) {
+      console.log("clicked with id:" + capability.id)
+      $http({
+        method: 'POST',
+        url: '/capabilities/update/' + capability.id,
+        data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
+      }).success(function() {
+        console.log("Capability Saved!");
+      })
+      .error(function() { console.log("error adding capability") });
+    }
+
     $scope.deleteCapability = function(id) {
       $http({
         method: 'DELETE',
@@ -89,13 +101,20 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       });
       return myIndex;
     };
+
     $scope.showCapList = function() {
       $scope.showCaps = true;
-      // console.log("showCaps: " + $scope.showCaps)
     }
     $scope.hideCapList = function() {
       $scope.showCaps = false;
-      // console.log("showCaps: "+$scope.showCaps)
+    }
+
+    $scope.toggleEditing = function () {
+      if ($scope.editing === true) {
+        $scope.editing = false
+      } else {
+        $scope.editing = true
+      }
     }
 
   }

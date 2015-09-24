@@ -118,34 +118,27 @@ end
 
 ## add new capability to attribute/component intersection
 post '/attributes/:attr_id/components/:comp_id' do
-
   data = JSON.parse request.body.read
-  puts "Hello #{data}!"
-  # new_capability = Capability.new(name: payload, project_id: params['id'].to_i)
-  # capName = "test capability name"
-  # capCode = "new cap code"
-  # capUrl = "www.test.com"
-  # capAuth = "test oauth"
-  # proj_id = Attribute.where(id: params['attr_id']).project_id
   new_capability = Capability.new(name: data['name'], project_id: data['project_id'], code: data['code'], url: data['url'], oauth: data['oauth'])
   new_capability.save
   @@fetcher.add(new_capability)
   CapabilityMap.new(project_id: data['project_id'], attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id).save
-  # new_CapabilityMap.save
 end
 
 ## update capability
-# update '/capabilities/:id' do
-#
-# @@fetcher.add(capability) ???
-#
-# end
+post '/capabilities/update/:id' do
+  data = JSON.parse request.body.read
+  capability = Capability.find(params['id'])
+  capability.update(name: data['name'], code: data['code'], url: data['url'], oauth: data['oauth'])
+
+end
 
 delete '/capabilities/:id' do
-  capability = Capability.where(id: params['id'])
-  map = ProjectMap.where(capability_id: params['id'])
+  capability = Capability.find(params['id'])
+  map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
-  map.destroy
+  map.destroy_all
+  "Map Destroyed"
 end
 
 ###################

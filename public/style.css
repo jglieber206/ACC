@@ -105,6 +105,12 @@ input[type=submit] {
   overflow: scroll;
   width: 70%;
 }
+
+.caps td input {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+}
 .caps {
   margin-left: 20px;
   margin-right: 20px;
