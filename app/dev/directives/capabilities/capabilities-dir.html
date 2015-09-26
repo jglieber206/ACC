@@ -1,0 +1,82 @@
+<div id="capability_form" ng-if="showCaps">
+  <h3>Capabilities:</h3>
+  <table ng-if="!editing" class="caps" ng-repeat="capability in capsInCell">
+    <tr>
+      <th>Name:</th>
+      <td ng-model="capability">{{capability.name}}</td>
+    </tr>
+    <tr>
+      <th>Code:</th>
+      <td>{{capability.code}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>URL:</th>
+      <td>{{capability.url}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>OAuth:</th>
+      <td>{{capability.oauth}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>Success? </th>
+      <td ng-style="textStyle">{{capability.last_result}}</td>
+    </tr>
+    <tr>
+      <th>Result ID:</th>
+      <td>{{capability.result_id}}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <th><button ng-click="deleteCapability(capability.id)">Delete Capability</button></th>
+      <th><button ng-click="toggleEditing(); editCapability(capability_id)">Edit Capability</button></th>
+    </tr>
+  </table>
+
+  <form ng-if="editing" ng-repeat="capability in capsInCell" ng-submit="updateCapability(capability)">
+    <table class="caps">
+        <tr>
+          <th>Name:</th>
+          <td><input ng-model="capability.name" type="text"></td>
+        </tr>
+        <tr>
+          <th>Code:</th>
+          <td><input ng-model="capability.code" type="text" placeholder="{{capability.code}}"></td>
+        </tr>
+        <tr>
+          <th>URL:</th>
+          <td><input ng-model="capability.url" type="text" placeholder="{{capability.url}}"></td>
+        </tr>
+        <tr>
+          <th>OAuth:</th>
+          <td><input ng-model="capability.oauth" type="text" placeholder="{{capability.oauth}}"></td>
+        </tr>
+        <tr>
+          <th>Success? </th>
+          <td ng-style="textStyle">{{capability.last_result}}</td>
+        </tr>
+        <tr>
+          <th>Result ID:</th>
+          <td>{{capability.result_id}}</td>
+        </tr>
+    </table>
+    <input type="submit" value="Save Changes">
+  </form>
+
+  <button ng-if="editing" type="button" name="Cancel Edit" ng-click="toggleEditing()">Done Editing</button>
+  <p><a href="" ng-click="addCap=true" ng-hide="addCap">Add</a></p>
+
+  <form class="caps" ng-show="addCap" ng-submit="addCapability(project.id)">
+    <table class="caps">
+      <p>Name:  <input float="right" ng-model="newCapName" type="text"></p>
+      <p>Code:  <input float="right" ng-model="newCapCode" type="text"></p>
+      <p>Url:   <input float="right" ng-model="newCapUrl" type="text"></p>
+      <p>Oauth: <input float="right" ng-model="newCapOauth" type="text"></p>
+      <input type="submit" value="Add Capability"><br>
+      <button ng-click="addCap=false">Cancel</button>
+    </table>
+  </form>
+  <button ng-click="hideCapList()" ng-if="showCaps">Close</button>
+</div>

@@ -10,8 +10,12 @@ module.exports = {
 
   module: {
     preloaders: [
-      { test: /\.js$/,
-        loader: "source-map-loader"
+      { test: /\.js$/, loader: "source-map-loader"}
+    ],
+    loaders: [
+      {
+        test: /\.html$/,
+        loader: "ngtemplate?!html"
       }
     ]
   }
