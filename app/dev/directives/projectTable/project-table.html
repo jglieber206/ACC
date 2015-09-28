@@ -1,15 +1,28 @@
+
 <table id="grid">
   <tr>
     <th>&nbsp</th>
     <th ng-repeat="attribute in attributesList">{{attribute.name}}</th>
+    <th> + </th>
   </tr>
   <tr ng-repeat="component in componentsList">
     <th>{{component.name}}</th>
     <td ng-repeat="attribute in attributesList" ng-style="{'background-color': cellColor}">
-      <button ng-click="cellCapList(getCellCapabilities(attribute.id, component.id)); showCapList(); textStyle={'color': cellColor}; setAttrAndComp(attribute.id, component.id)" >
+      <button ng-click="
+        cellCapList(getCellCapabilities(attribute.id, component.id));
+        showCapList();
+        textStyle={'color': cellColor};
+        getCurrentAttr(attribute.id);
+        getCurrentComp(component.id)" >
         {{getCellCapabilities(attribute.id, component.id).length}}
-
       </button>
+      <ul>
+        <li ng-repeat="cap in a">{{cap.name}}</li>
+      </ul>
     </td>
+  </tr>
+
+  <tr>
+    <th> + </th>
   </tr>
 </table>
