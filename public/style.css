@@ -39,16 +39,9 @@ html, body {
   background: linen;
 }
 
-input[type=submit] {
-  background: #f4f4f4;
-  border-radius: 5px;
-  border: 1;
-  height:25px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  width: 10em;
+ul {
+  list-style-type: none;
 }
-
 /* project grid */
 .project {
   text-align: center;
@@ -86,35 +79,10 @@ input[type=submit] {
   text-align: center;
 }
 
-/* capabilities */
-#capability_form {
-  border: 1px solid black;
-  border-collapse: collapse;
-  margin-left: 40%;
-  margin-right: auto;
-  text-align: center;
-  width: 50%;
-}
-.caps th {
-  padding: 5px;
-  text-align: right;
-  width: 30%;
-}
-.caps td {
-  border: 1px solid black;
-  overflow: scroll;
-  width: 70%;
+.caps {
+  margin: auto;
 }
 
-.caps td input {
-  height: 100%;
-  width: 100%;
-  text-align: center;
-}
-.caps {
-  margin-left: 20px;
-  margin-right: 20px;
-  padding-bottom: 20px;
-  table-layout: fixed;
-  width: 80%;
+.caps p{
+  margin: 1px;
 }

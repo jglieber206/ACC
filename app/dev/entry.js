@@ -7,6 +7,7 @@ require('./controllers/capabilitiesController.js');
 require('./controllers/projectsListController.js');
 //directives
 require('./directives/capabilities/capabilitiesDir.js')
-require('./directives/att&comp/attAndComp.js')
 require('./directives/projectTable/projectTable.js')
 require('./directives/sidebar/sidebar.js')
+//styles
+require('./styles/modal.scss');

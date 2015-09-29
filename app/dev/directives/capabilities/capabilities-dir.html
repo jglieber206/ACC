@@ -1,16 +1,12 @@
-<div id="capability_form" ng-if="showCaps" style="background-color:white">
+<div ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog">
+  <a href="#close" title="Close" class="close">X</a>
   <h3>{{currentComponent.name}} + {{currentAttribute.name}}</h3>
   <div ng-if="!editing" class="caps" ng-repeat="capability in capsInCell">
-
-      <p>Name: {{capability.name}}</p>
-      <p>Success?: {{capability.last_result}}</p>
-
-
+    <p>Name: {{capability.name}}</p>
+    <p>Success?: {{capability.last_result}}</p>
     <p><button ng-click="deleteCapability(capability.id)">Delete Capability</button></p>
-    <p><button ng-click="toggleEditing(); editCapability(capability_id)">Edit Capability</button></p>
-
   </div>
-
+  <button ng-if="!editing" ng-click="toggleEditing(); editCapability(capability_id)">Edit Capabilities</button>
   <form ng-if="editing" ng-repeat="capability in capsInCell" ng-submit="updateCapability(capability)">
           <p> Name: <input ng-model="capability.name" type="text" placeholder="{{capability.code}}"> </p>
           <p> Code: <input ng-model="capability.code" type="text" placeholder="{{capability.code}}"> </p>
@@ -21,7 +17,7 @@
     <input type="submit" value="Save Changes">
   </form>
 
-  <button ng-if="editing" type="button" name="Cancel Edit" ng-click="toggleEditing()">Done Editing</button>
+  <button ng-if="editing" type="button" name="Cancel Edit" ng-click="toggleEditing()">Cancel</button>
   <p><a href="" ng-click="addCap=true" ng-hide="addCap">Add</a></p>
 
   <form class="caps" ng-show="addCap" ng-submit="addCapability(project.id)">
@@ -30,9 +26,8 @@
       <p>Code:  <input float="right" ng-model="newCapCode" type="text"></p>
       <p>Url:   <input float="right" ng-model="newCapUrl" type="text"></p>
       <p>Oauth: <input float="right" ng-model="newCapOauth" type="text"></p>
-      <input type="submit" value="Add Capability"><br>
-      <button ng-click="addCap=false">Cancel</button>
+      <input type="submit" value="Add Capability" ng-click="toggleEditing()><br>
     </table>
   </form>
-  <button ng-click="hideCapList()" ng-if="showCaps">Close</button>
+  <button ng-click="hideCapList(); toggleEditing()" ng-if="showCaps">Close</button>
 </div>

@@ -16,7 +16,16 @@ module.exports = {
       {
         test: /\.html$/,
         loader: "ngtemplate?!html"
+      },
+      {
+        test:/\.css$/,
+        loader: 'style!css'
+      },
+      {
+        test: /\.scss$/,
+        loader: "style!css!sass"
       }
     ]
   }
+
 }
