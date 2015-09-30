@@ -8,12 +8,13 @@
       <th>{{component.name}}</th>
       <td ng-repeat="attribute in attributesList" ng-style="{'background-color': cellColor}">
         <a href="#openModal">
-          <button ng-click="
-            cellCapList(getCellCapabilities(attribute.id, component.id));
-            showCapList();
-            textStyle={'color': cellColor};
-            getCurrentAttr(attribute.id);
-            getCurrentComp(component.id)" >
+          <button
+            ng-click="
+              cellCapList(getCellCapabilities(attribute.id, component.id));
+              showCapList();
+              textStyle={'color': cellColor};
+              getCurrentAttr(attribute.id);
+              getCurrentComp(component.id)" >
             {{getCellCapabilities(attribute.id, component.id).length}}
           </button>
         </a>

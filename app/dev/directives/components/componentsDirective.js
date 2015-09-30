@@ -1,8 +1,8 @@
 var angular = require('angular');
 var app = require('../../app.js');
-var templateUrl = require('./project-table.html');
+var templateUrl = require('./components-directive.html');
 
-app.directive('projectTableDirective', function() {
+app.directive('componentsDirective', function() {
   return {
     retrict: 'E',
     templateUrl: templateUrl,

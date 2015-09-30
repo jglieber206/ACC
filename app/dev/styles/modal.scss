@@ -14,6 +14,12 @@
 	pointer-events: none;
   border: 1px solid black;
   overflow: scroll;
+
+	.capability-listing{
+		margin: auto;
+		margin-bottom: 2em;
+		border: 1px solid black;
+	}
 }
 
 .modalDialog:target {

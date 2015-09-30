@@ -3,12 +3,18 @@ var app = require('../app.js')
 
 app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
 
-    $scope.addCapability = function(proj_id) {
+    $scope.addCapability = function(newCapability, proj_id) {
       $http({
         method: 'POST',
         url: '/attributes/'+$scope.currentAttribute.id+'/components/'+$scope.currentComponent.id,
-        data: { name: this.newCapName, project_id: proj_id, code: this.newCapCode, url: this.newCapUrl, oauth: this.newCapOauth }
-      }).success(function() { console.log("added capability!") })
+        data: {
+          name: newCapability.capabilityName,
+          project_id: proj_id,
+          code: newCapability.capabilityCode,
+          url: newCapability.capabilityUrl,
+          oauth: newCapability.capabilityOauth
+        }
+      }).success(function(response) { $scope.capsInCell.push(response) })
       .error(function() { console.log("error adding capability") });
     }
 
@@ -60,7 +66,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
         if ($scope.projectMaps[i].attribute_id === attr_id && $scope.projectMaps[i].component_id === comp_id) {
           cap = getIndexById($scope.projectMaps[i].capability_id, $scope.projectCapabilities);
           a.push($scope.projectCapabilities[cap]);
-          console.log($scope.projectCapabilities[cap])
         }
       }
       $scope.colorCell(a);
@@ -109,13 +114,20 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       $scope.showCaps = false;
     }
 
-    $scope.toggleEditing = function () {
-      if ($scope.editing === true) {
-        $scope.editing = false
+    $scope.toggleEditing = function (capability) {
+      if (capability.editing) {
+        capability.name = capability.oldName;
+        capability.code = capability.oldCode;
+        capability.url = capability.oldUrl;
+        capability.oauth = capability.oldOauth;
+        capability.editing = false;
       } else {
-        $scope.editing = true
+        capability.oldName = capability.name;
+        capability.oldCode = capability.code;
+        capability.oldUrl = capability.url;
+        capability.oldOauth = capability.oauth;
+        capability.editing = true;
       }
     }
 
-  }
-]);
+}]);
