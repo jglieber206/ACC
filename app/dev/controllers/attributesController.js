@@ -5,7 +5,6 @@ var app = require('../app.js');
 app.controller('AttributesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
 
   $scope.addAttribute = function(id) {
-    console.log('hello');
     $http({
       method: 'POST',
       url: '/projects/' + id + '/attributes',

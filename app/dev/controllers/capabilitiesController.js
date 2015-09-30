@@ -19,13 +19,12 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     }
 
     $scope.updateCapability = function(capability) {
-      console.log("clicked with id:" + capability.id)
       $http({
         method: 'POST',
         url: '/capabilities/update/' + capability.id,
         data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
       }).success(function() {
-        console.log("Capability Saved!");
+        
       })
       .error(function() { console.log("error adding capability") });
     }
