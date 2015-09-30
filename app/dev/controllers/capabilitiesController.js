@@ -30,15 +30,16 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       .error(function() { console.log("error adding capability") });
     }
 
-    $scope.deleteCapability = function(id) {
+    $scope.deleteCapability = function(capability) {
       $http({
         method: 'DELETE',
-        url: '/capabilities/' + id
+        url: '/capabilities/' + capability.id
       })
-      .success(function() { console.log("Capability deleted") })
+      .success(function(capability) {
+        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1)
+       })
       .error(function() { console.log("error deleting capability") })
     }
-
 
     $scope.currentAttribute = null;
     $scope.currentComponent = null;

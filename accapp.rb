@@ -139,7 +139,7 @@ delete '/capabilities/:id' do
   map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
   map.destroy_all
-  "Map Destroyed"
+  capability.to_json
 end
 
 ###################
