@@ -1,0 +1,16 @@
+<div ng-controller="AttributesController" id="edit_attributes">
+  <h3>Attributes:</h3>
+  <ul ng-repeat="attribute in attributesList">
+    <li>{{attribute.name}}</li>
+    <li>
+      <button ng-click="deleteAttribute(attribute.id)">Remove</button>
+    </li>
+  </ul>
+  <button ng-click="addAttr=true" ng-hide="addAttr">Add</button>
+  <form ng-show="addAttr">
+    <label for="new-attribute">New Attribute Name:<br><label>
+    <input id="new-attribute" ng-model="newAttribute" type="text"><br>
+    <input type="submit" value="Add Attribute" ng-click="addAttribute(project.id); addAttr=true"><br>
+    <button ng-click="addAttr=false">Cancel</button>
+  </form>
+</div>

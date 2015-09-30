@@ -1,0 +1,21 @@
+<div class="sidebar" ng-init="getProjects()">
+  <div class="projectList">
+    <h2>Project list</h2>
+    <ul ng-repeat="project in projectList">
+      <li><a href="" ng-click="openProject(project.id)">{{project.name}}</li>
+      <li><a href="" ng-click="deleteProject(project.id)">Delete</li>
+    </ul>
+  </div>
+
+  <button ng-click="showform=true" ng-hide="showform">Add</button>
+  <div ng-show="showform">
+    <form class="new_project" ng-submit="addProject()">
+      <td colspan="2">
+        New project name: <input ng-model="newProject" type="text"><br>
+        <input type="submit" value="Create Project" ng-show="showform" ng-click="showform=false"><br>
+        <a href="" ng-click="showform=false" ng-show="showform">Cancel</a>
+      </td>
+    </form>
+  </div>
+
+</div>

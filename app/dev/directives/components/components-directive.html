@@ -1,0 +1,16 @@
+<div ng-controller="ComponentsController" id="edit_components">
+  <h3>Components:</h3>
+  <ul ng-repeat="component in componentsList">
+    <li>{{component.name}}</li>
+    <li>
+      <button ng-click="deleteComponent(component.id)">Remove</button>
+    </li>
+  </ul>
+  <button ng-click="addComp=true" ng-hide="addComp">Add</button>
+  <form ng-show="addComp">
+    <label for="new-component">New Component Name:</label>
+    <input id="new-component" ng-model="newComponent" type="text"><br>
+    <input type="submit" value="Add Component" ng-click="addComponent(project.id); addComp=true"><br>
+    <button ng-click="addComp=false">Cancel</button>
+  </form>
+</div>

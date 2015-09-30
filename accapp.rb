@@ -113,7 +113,7 @@ get '/attributes/:attr_id/components/:comp_id' do
     tmp << map.capability_id
   end
   capList = Capability.where(id: tmp).all.to_json
-  return capList
+  capList
 end
 
 ## add new capability to attribute/component intersection
@@ -123,6 +123,7 @@ post '/attributes/:attr_id/components/:comp_id' do
   new_capability.save
   @@fetcher.add(new_capability)
   CapabilityMap.new(project_id: data['project_id'], attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id).save
+  new_capability.to_json
 end
 
 ## update capability
@@ -138,7 +139,7 @@ delete '/capabilities/:id' do
   map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
   map.destroy_all
-  "Map Destroyed"
+  capability.to_json
 end
 
 ###################
