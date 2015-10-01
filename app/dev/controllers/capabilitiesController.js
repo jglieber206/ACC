@@ -23,8 +23,9 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
         method: 'POST',
         url: '/capabilities/update/' + capability.id,
         data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
-      }).success(function() {
-        
+      }).success(function(response) {
+        capability.name = response.name;
+        console.log(capability);
       })
       .error(function() { console.log("error adding capability") });
     }
