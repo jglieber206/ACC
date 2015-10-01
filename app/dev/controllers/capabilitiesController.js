@@ -24,8 +24,12 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
         url: '/capabilities/update/' + capability.id,
         data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
       }).success(function(response) {
-        capability.name = response.name;
-        console.log(capability);
+        console.log("response before:", response);
+        console.log("capability before:", capability);
+        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1)
+        $scope.capsInCell.push(response)
+        console.log("response after:", response);
+        console.log("capability after:", capability);
       })
       .error(function() { console.log("error adding capability") });
     }
