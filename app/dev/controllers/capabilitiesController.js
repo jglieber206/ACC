@@ -25,7 +25,7 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       });
     }
 
-    $scope.updateCapability = function(capability, id) {
+    $scope.updateCapability = function(capability) {
       $http({
         method: 'POST',
         url: '/capabilities/update/' + capability.id,
