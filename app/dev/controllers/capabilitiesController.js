@@ -1,7 +1,7 @@
 var angular = require('angular');
 var app = require('../app.js')
 
-app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', '$modal', function ($scope, $http, $rootScope, $modal) {
 
     $scope.addCapability = function(newCapability, proj_id) {
       $http({
@@ -14,24 +14,24 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
           url: newCapability.capabilityUrl,
           oauth: newCapability.capabilityOauth
         }
-      }).success(function(response) { $scope.capsInCell.push(response) })
-      .error(function() { console.log("error adding capability") });
+      }).success(function(response) {
+        $scope.capsInCell.push(response)
+      }).error(function() {
+        console.log("error adding capability")
+      });
     }
 
-    $scope.updateCapability = function(capability) {
+    $scope.updateCapability = function(capability, id) {
       $http({
         method: 'POST',
         url: '/capabilities/update/' + capability.id,
         data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
       }).success(function(response) {
-        console.log("response before:", response);
-        console.log("capability before:", capability);
-        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1)
-        $scope.capsInCell.push(response)
-        console.log("response after:", response);
-        console.log("capability after:", capability);
-      })
-      .error(function() { console.log("error adding capability") });
+        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1);
+        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 0, response);
+      }).error(function() {
+        console.log("error adding capability")
+      });
     }
 
     $scope.deleteCapability = function(capability) {
@@ -41,8 +41,9 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       })
       .success(function(capability) {
         $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1)
-       })
-      .error(function() { console.log("error deleting capability") })
+       }).error(function() {
+         console.log("error deleting capability")
+       });
     }
 
     $scope.currentAttribute = null;
@@ -112,6 +113,12 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       return myIndex;
     };
 
+    // $scope.open = function() {
+    //     $scope.$modalInstance = $modal.open({
+    //         scope: $scope,
+    //         templateUrl: "capabilities-dir.html",
+    //     })
+    // };
     $scope.showCapList = function() {
       $scope.showCaps = true;
     }

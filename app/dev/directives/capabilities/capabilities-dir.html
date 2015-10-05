@@ -1,4 +1,4 @@
-<div ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog">
+<div ng-click="open()" ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog">
   <a href="#close" title="Close" class="close">X</a>
   <h3>{{currentComponent.name}} + {{currentAttribute.name}}</h3>
 
@@ -9,7 +9,7 @@
     <li>
       <form ng-if="capability.editing">
         <label for="capabilityName">Name</label>
-        <input id="capabilityName"ng-model="capability.name" type="text">
+        <input id="capabilityName" ng-model="capability.name" type="text">
         <label for="capabilityCode">Code</label>
         <input id="capabilityCode" ng-model="capability.code" type="text">
         <label for="capabilityUrl">URL</label>
