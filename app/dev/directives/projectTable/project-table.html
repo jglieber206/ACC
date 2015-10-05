@@ -5,7 +5,7 @@
       <th ng-repeat="attribute in attributesList">{{attribute.name}}</th>
     </tr>
     <tr ng-repeat="component in componentsList">
-      <th ng-model="capability.name">{{component.name}}</th>
+      <th>{{component.name}}</th>
       <td ng-repeat="attribute in attributesList" ng-style="{'background-color': cellColor}">
         <a href="#openModal">
           <button

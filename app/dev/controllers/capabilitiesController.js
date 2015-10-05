@@ -95,8 +95,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       else if (!result) {
         $scope.cellColor = 'firebrick';
       }
-      // console.log("result: "+result)
-      // return $scope.cellColor;
     }
     /*
     getIndexById takes an id & an array, and returns the index
@@ -113,12 +111,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       return myIndex;
     };
 
-    // $scope.open = function() {
-    //     $scope.$modalInstance = $modal.open({
-    //         scope: $scope,
-    //         templateUrl: "capabilities-dir.html",
-    //     })
-    // };
     $scope.showCapList = function() {
       $scope.showCaps = true;
     }
