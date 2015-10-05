@@ -1,4 +1,4 @@
-<div ng-click="open()" ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog">
+<div ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog">
   <a href="#close" title="Close" class="close">X</a>
   <h3>{{currentComponent.name}} + {{currentAttribute.name}}</h3>
 
@@ -30,7 +30,7 @@
     <label for="newCapabilityCode">Code</label>
     <input id="newCapabilityCode" ng-model="newCapability.capabilityCode" type="text"></p>
     <label for="newCapabilityUrl">URL</label>
-    <input id="newCapabilityUrl"ng-model="newCapability.capabilityUrl" type="text"></p>
+    <input id="newCapabilityUrl" ng-model="newCapability.capabilityUrl" type="text"></p>
     <label for="newCapabilityOauth">Oauth</label>
     <input id="newCapabilityOauth" ng-model="newCapability.capabilityOauth" type="text"></p>
     <input type="submit" value="Add Capability" ng-click="addCapability(newCapability, project.id)"><br>

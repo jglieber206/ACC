@@ -1,7 +1,11 @@
 var angular = require('angular');
 var app = require('../app.js')
 
-app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', '$modal', function ($scope, $http, $rootScope, $modal) {
+app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+    $scope.currentAttribute = null;
+    $scope.currentComponent = null;
+    $scope.capsInCell = [];
+    $scope.a = [];
 
     $scope.addCapability = function(newCapability, proj_id) {
       $http({
@@ -27,8 +31,7 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', '$mod
         url: '/capabilities/update/' + capability.id,
         data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
       }).success(function(response) {
-        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1);
-        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 0, response);
+        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1, response);
       }).error(function() {
         console.log("error adding capability")
       });
@@ -46,9 +49,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', '$mod
        });
     }
 
-    $scope.currentAttribute = null;
-    $scope.currentComponent = null;
-
     $scope.getCurrentAttr = function(attr_id) {
       attrIndex = getIndexById(attr_id, $scope.attributesList);
       $scope.currentAttribute = $scope.attributesList[attrIndex];
@@ -60,12 +60,12 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', '$mod
     }
 
 
-    $scope.capsInCell = [];
+
     $scope.cellCapList = function(capabilities) {
       $scope.capsInCell = capabilities;
     }
 
-    $scope.a = [];
+
     $scope.getCellCapabilities = function(attr_id, comp_id) {
       var a = [];
       for (var i = 0; i < $scope.projectMaps.length; i++) {
@@ -128,16 +128,8 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', '$mod
 
     $scope.toggleEditing = function (capability) {
       if (capability.editing) {
-        capability.name = capability.oldName;
-        capability.code = capability.oldCode;
-        capability.url = capability.oldUrl;
-        capability.oauth = capability.oldOauth;
         capability.editing = false;
       } else {
-        capability.oldName = capability.name;
-        capability.oldCode = capability.code;
-        capability.oldUrl = capability.url;
-        capability.oldOauth = capability.oauth;
         capability.editing = true;
       }
     }

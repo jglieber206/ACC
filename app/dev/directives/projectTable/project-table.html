@@ -5,7 +5,7 @@
       <th ng-repeat="attribute in attributesList">{{attribute.name}}</th>
     </tr>
     <tr ng-repeat="component in componentsList">
-      <th>{{component.name}}</th>
+      <th ng-model="capability.name">{{component.name}}</th>
       <td ng-repeat="attribute in attributesList" ng-style="{'background-color': cellColor}">
         <a href="#openModal">
           <button
@@ -14,7 +14,7 @@
               showCapList();
               textStyle={'color': cellColor};
               getCurrentAttr(attribute.id);
-              getCurrentComp(component.id); open()" >
+              getCurrentComp(component.id);" >
             {{getCellCapabilities(attribute.id, component.id).length}}
           </button>
         </a>
