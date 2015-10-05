@@ -131,7 +131,7 @@ post '/capabilities/update/:id' do
   data = JSON.parse request.body.read
   capability = Capability.find(params['id'])
   capability.update(name: data['name'], code: data['code'], url: data['url'], oauth: data['oauth'])
-
+  capability.to_json
 end
 
 delete '/capabilities/:id' do
@@ -139,7 +139,6 @@ delete '/capabilities/:id' do
   map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
   map.destroy_all
-  capability.to_json
 end
 
 ###################
