@@ -7,6 +7,7 @@ require './models/attribute'
 require './models/component'
 require './models/capability'
 require './models/capability_map'
+require './models/result'
 require 'pg'
 require 'json'
 require 'rufus-scheduler'
@@ -131,7 +132,7 @@ post '/capabilities/update/:id' do
   data = JSON.parse request.body.read
   capability = Capability.find(params['id'])
   capability.update(name: data['name'], code: data['code'], url: data['url'], oauth: data['oauth'])
-
+  capability.to_json
 end
 
 delete '/capabilities/:id' do
@@ -139,8 +140,12 @@ delete '/capabilities/:id' do
   map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
   map.destroy_all
-  capability.to_json
 end
+
+get '/capabilites/results/:id' do
+  Result.where(project_id: params['id']).limit(1000).order(time: :desc).to_json
+end
+
 
 ###################
 ## Map functions ##

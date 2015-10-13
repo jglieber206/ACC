@@ -20,12 +20,19 @@ class CreateProject < ActiveRecord::Migration
       t.string :url
       t.string :oauth
       t.boolean :last_result
+      t.integer :last_failure
     end
     create_table :capability_maps do |t|
       t.integer :project_id
       t.integer :attribute_id
       t.integer :component_id
       t.integer :capability_id
+    end
+    create_table :results do |t|
+      t.integer  :capability_id
+      t.integer  :project_id
+      t.integer  :time
+      t.boolean  :result
     end
   end
 

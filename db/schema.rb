@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20150819210813) do
     t.string  "url"
     t.string  "oauth"
     t.boolean "last_result"
+    t.integer "last_failure"
   end
 
   create_table "capability_maps", force: :cascade do |t|
@@ -45,6 +46,13 @@ ActiveRecord::Schema.define(version: 20150819210813) do
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
+  end
+
+  create_table "results", force: :cascade do |t|
+    t.integer  "capability_id"
+    t.integer  "project_id"
+    t.integer  "time"
+    t.boolean  "result"
   end
 
 end

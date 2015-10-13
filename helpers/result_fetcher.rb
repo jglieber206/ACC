@@ -1,5 +1,6 @@
 require 'active_record'
 require_relative '../models/capability'
+require_relative '../models/result'
 require 'faraday'
 require 'execjs'
 
@@ -33,9 +34,14 @@ class ResultFetcher
          puts e
          result = false
       end
-      puts result
+      time = Time.now.getutc
+      if !result
+        capability.last_failure = time
+      end
       capability.last_result = result
       capability.save
+      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time: time, result: capability.last_result)
+      new_result.save
     end
   end
 
