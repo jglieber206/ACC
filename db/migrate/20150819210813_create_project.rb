@@ -20,7 +20,6 @@ class CreateProject < ActiveRecord::Migration
       t.string :url
       t.string :oauth
       t.boolean :last_result
-      t.integer :last_failure
     end
     create_table :capability_maps do |t|
       t.integer :project_id
@@ -31,7 +30,8 @@ class CreateProject < ActiveRecord::Migration
     create_table :results do |t|
       t.integer  :capability_id
       t.integer  :project_id
-      t.integer  :time
+      t.integer  :time_start
+      t.integer  :time_end
       t.boolean  :result
     end
   end

@@ -34,14 +34,9 @@ class ResultFetcher
          puts e
          result = false
       end
-      time = Time.now.getutc
-      if !result
-        capability.last_failure = time
-      end
       capability.last_result = result
       capability.save
-      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time: time, result: capability.last_result)
-      new_result.save
+      check_result(capability)
     end
   end
 
@@ -49,5 +44,21 @@ class ResultFetcher
     return if @to_do[capability.id]
     @to_do[capability.id] = capability
     internal_runner
+  end
+
+  def check_result (capability)
+    time = Time.now.getutc
+    check = Result.where(capability_id: capability.id).order(time_start: :desc).first
+    if !check
+      puts "CREATING NEW RESULT"
+      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time_start: time, result: capability.last_result)
+      new_result.save
+    elsif  check.result != capability.last_result
+      puts "UPDATING RESULTS HISTORY"
+      check.time_end = time
+      check.save
+      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time_start: time, result: capability.last_result)
+      new_result.save
+    end
   end
 end
