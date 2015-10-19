@@ -7,6 +7,7 @@ require './models/attribute'
 require './models/component'
 require './models/capability'
 require './models/capability_map'
+require './models/result'
 require 'pg'
 require 'json'
 require 'rufus-scheduler'
@@ -140,6 +141,11 @@ delete '/capabilities/:id' do
   capability.destroy
   map.destroy_all
 end
+
+get '/capabilites/results/:id' do
+  Result.where(project_id: params['id']).limit(1000).order(time: :desc).to_json
+end
+
 
 ###################
 ## Map functions ##

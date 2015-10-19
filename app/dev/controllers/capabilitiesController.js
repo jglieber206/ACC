@@ -1,5 +1,6 @@
 var angular = require('angular');
-var app = require('../app.js')
+var app = require('../app.js');
+var moment = require('moment');
 
 app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
     $scope.currentAttribute = null;
@@ -124,6 +125,16 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       } else {
         capability.editing = true;
       }
+    }
+
+    $scope.history = [];
+    $scope.getHistory = function(project) {
+      $http({
+        method: 'GET',
+        url: '/capabilites/results/' + project.id
+      }).success(function (data) {
+        $scope.history = data;
+      }).error(function() {console.log("Could not get history")})
     }
 
 }]);

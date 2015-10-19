@@ -27,6 +27,13 @@ class CreateProject < ActiveRecord::Migration
       t.integer :component_id
       t.integer :capability_id
     end
+    create_table :results do |t|
+      t.integer  :capability_id
+      t.integer  :project_id
+      t.integer  :time_start
+      t.integer  :time_end
+      t.boolean  :result
+    end
   end
 
   def down
