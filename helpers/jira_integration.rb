@@ -1,9 +1,8 @@
 require 'sinatra'
 require 'oauth'
 require 'multi_json'
-# require 'sinatra/base'
 
-# This section gets called before every request. Here, we set up the
+# Here, we set up the
 # OAuth consumer details including the consumer key, private key,
 # site uri, and the request token, access token, and authorize paths
 before do
@@ -31,8 +30,6 @@ before do
     @request_token = OAuth::RequestToken.new(@consumer, session[:oauth][:request_token], session[:oauth][:request_token_secret])
   end
 
-  # In the real world, you'll want to store the access token inside a datastore so as
-  # to prevent your app from continually asking the user to approve/deny the authorization.
   if !session[:oauth][:access_token].nil? && !session[:oauth][:access_token_secret].nil?
     $access_token = OAuth::AccessToken.new(@consumer, session[:oauth][:access_token], session[:oauth][:access_token_secret])
   end
@@ -78,8 +75,7 @@ get '/signin' do
 end
 
 # http://<yourserver>/auth
-# Retrieves the $access_token then stores it inside a session cookie. In a real app,
-# you'll want to persist the token in a datastore associated with the user.
+# Retrieves the $access_token then stores it inside a session cookie. 
 get "/auth" do
   $access_token = @request_token.get_access_token :oauth_verifier => params[:oauth_verifier]
   session[:oauth][:access_token] = $access_token.token
@@ -96,8 +92,5 @@ get "/signout" do
 end
 
 get "/test" do
-  # result = $access_token.get('https://apptentive.atlassian.net/rest/api/latest/issue/MARCOM-94')
-  # 200 == result.status ? result.body : result.status
   ticket = $access_token.get('/rest/api/latest/issue/MARCOM-94').body
-                                            # {'Accept' => 'application/json'}).body)
 end

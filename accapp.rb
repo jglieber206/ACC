@@ -40,7 +40,7 @@ get '/projects/:id' do
   Project.find(params['id'].to_i).to_json
 end
 
-## Add new projectroutes
+## Add new project
 post '/projects' do
   payload = request.body.read
   new_project = Project.new(name: payload)
