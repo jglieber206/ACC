@@ -1,7 +1,9 @@
 require 'active_record'
 require_relative '../models/capability'
+require_relative '../models/result'
 require 'faraday'
-require 'execjs'
+require './helpers/jira_integration'
+require 'json'
 
 class ResultFetcher
 
@@ -10,10 +12,14 @@ class ResultFetcher
   end
 
   def fetch(url)
-    result = Faraday.get(url)
-    200 == result.status ? result.body : result.status
+    if url =~ /jenkins.corp.apptentive.com/
+      result = Faraday.get(url)
+      200 == result.status ? result.body : result.status
+    else
+      result = $access_token.get(url)
+      result.body
+    end
   rescue => e
-    e
   end
 
   def run
@@ -28,14 +34,15 @@ class ResultFetcher
       test_result = fetch(capability.url)
       result = ""
       begin
-        result = ExecJS.eval("#{test_result}#{capability.code}")
+        result_hash = JSON.parse(%Q{ #{test_result} })
+        capability_code = %Q{ #{capability.code} }
+        result = eval("#{result_hash}#{capability_code}")
       rescue => e
-         puts e
          result = false
       end
-      puts result
       capability.last_result = result
       capability.save
+      check_result(capability)
     end
   end
 
@@ -43,5 +50,19 @@ class ResultFetcher
     return if @to_do[capability.id]
     @to_do[capability.id] = capability
     internal_runner
+  end
+
+  def check_result (capability)
+    time = Time.now.getutc
+    check = Result.where(capability_id: capability.id).order(time_start: :desc).first
+    if !check
+      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time_start: time, result: capability.last_result)
+      new_result.save
+    elsif  check.result != capability.last_result
+      check.time_end = time
+      check.save
+      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time_start: time, result: capability.last_result)
+      new_result.save
+    end
   end
 end

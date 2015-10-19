@@ -1,17 +1,22 @@
-require 'bundler/setup'
 require 'sinatra'
 require 'sinatra/activerecord'
-require './config/environments'
 require './models/project'
 require './models/attribute'
 require './models/component'
 require './models/capability'
 require './models/capability_map'
+require './models/result'
+require './helpers/result_fetcher'
+require './helpers/jira_integration'
+require './config/environments'
 require 'pg'
 require 'json'
 require 'rufus-scheduler'
-require './helpers/result_fetcher'
+require 'bundler/setup'
 
+
+enable :sessions
+set :port, 9292
 set :public_folder, File.dirname(__FILE__) + '/public'
 
 @@fetcher = ResultFetcher.new
@@ -35,7 +40,7 @@ get '/projects/:id' do
   Project.find(params['id'].to_i).to_json
 end
 
-## Add new project
+## Add new projectroutes
 post '/projects' do
   payload = request.body.read
   new_project = Project.new(name: payload)
@@ -59,7 +64,7 @@ get '/public/:filename' do
 end
 
 #########################
-## Attribute functions ##
+## Attribute routes ##
 #########################
 
 ## Access attributes list for a specified project
@@ -79,7 +84,7 @@ delete '/attributes/:id' do
 end
 
 #########################
-## Component functions ##
+## Component routes ##
 #########################
 
 ## Access components list for a specified project
@@ -98,7 +103,7 @@ delete '/components/:id' do
   component.destroy
 end
 ##########################
-## Capability functions ##
+## Capability routes ##
 ##########################
 
 ## get all capabilities for a project
@@ -131,7 +136,7 @@ post '/capabilities/update/:id' do
   data = JSON.parse request.body.read
   capability = Capability.find(params['id'])
   capability.update(name: data['name'], code: data['code'], url: data['url'], oauth: data['oauth'])
-
+  capability.to_json
 end
 
 delete '/capabilities/:id' do
@@ -139,11 +144,15 @@ delete '/capabilities/:id' do
   map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
   map.destroy_all
-  capability.to_json
 end
 
+get '/capabilites/results/:id' do
+  Result.where(project_id: params['id']).limit(1000).order(time: :desc).to_json
+end
+
+
 ###################
-## Map functions ##
+## Map routes ##
 ###################
 
 ## get map

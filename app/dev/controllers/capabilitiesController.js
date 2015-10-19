@@ -1,7 +1,12 @@
 var angular = require('angular');
-var app = require('../app.js')
+var app = require('../app.js');
+var moment = require('moment');
 
 app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', function ($scope, $http, $rootScope) {
+    $scope.currentAttribute = null;
+    $scope.currentComponent = null;
+    $scope.capsInCell = [];
+    $scope.a = [];
 
     $scope.addCapability = function(newCapability, proj_id) {
       $http({
@@ -14,8 +19,11 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
           url: newCapability.capabilityUrl,
           oauth: newCapability.capabilityOauth
         }
-      }).success(function(response) { $scope.capsInCell.push(response) })
-      .error(function() { console.log("error adding capability") });
+      }).success(function(response) {
+        $scope.capsInCell.push(response)
+      }).error(function() {
+        console.log("error adding capability")
+      });
     }
 
     $scope.updateCapability = function(capability) {
@@ -23,10 +31,11 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
         method: 'POST',
         url: '/capabilities/update/' + capability.id,
         data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
-      }).success(function() {
-        
-      })
-      .error(function() { console.log("error adding capability") });
+      }).success(function(response) {
+        $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1, response);
+      }).error(function() {
+        console.log("error adding capability")
+      });
     }
 
     $scope.deleteCapability = function(capability) {
@@ -36,12 +45,10 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       })
       .success(function(capability) {
         $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1)
-       })
-      .error(function() { console.log("error deleting capability") })
+       }).error(function() {
+         console.log("error deleting capability")
+       });
     }
-
-    $scope.currentAttribute = null;
-    $scope.currentComponent = null;
 
     $scope.getCurrentAttr = function(attr_id) {
       attrIndex = getIndexById(attr_id, $scope.attributesList);
@@ -54,12 +61,12 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     }
 
 
-    $scope.capsInCell = [];
+
     $scope.cellCapList = function(capabilities) {
       $scope.capsInCell = capabilities;
     }
 
-    $scope.a = [];
+
     $scope.getCellCapabilities = function(attr_id, comp_id) {
       var a = [];
       for (var i = 0; i < $scope.projectMaps.length; i++) {
@@ -89,8 +96,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       else if (!result) {
         $scope.cellColor = 'firebrick';
       }
-      // console.log("result: "+result)
-      // return $scope.cellColor;
     }
     /*
     getIndexById takes an id & an array, and returns the index
@@ -116,18 +121,20 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
 
     $scope.toggleEditing = function (capability) {
       if (capability.editing) {
-        capability.name = capability.oldName;
-        capability.code = capability.oldCode;
-        capability.url = capability.oldUrl;
-        capability.oauth = capability.oldOauth;
         capability.editing = false;
       } else {
-        capability.oldName = capability.name;
-        capability.oldCode = capability.code;
-        capability.oldUrl = capability.url;
-        capability.oldOauth = capability.oauth;
         capability.editing = true;
       }
+    }
+
+    $scope.history = [];
+    $scope.getHistory = function(project) {
+      $http({
+        method: 'GET',
+        url: '/capabilites/results/' + project.id
+      }).success(function (data) {
+        $scope.history = data;
+      }).error(function() {console.log("Could not get history")})
     }
 
 }]);

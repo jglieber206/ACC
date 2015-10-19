@@ -7,6 +7,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
   </head>
   <body ng-controller="ProjectsListController">
+    <a href="/jira"><button>LOGIN</button></a>
     <div sidebar-directive></div>
     <div ng-controller="CapabilitiesController">
       <div class="project" ng-init="openProject(1); getAttributes(1); getComponents(1)">
