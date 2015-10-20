@@ -26,8 +26,8 @@ if has_logged_in == false
     })
     @request_token = OAuth::RequestToken.new(@consumer, request_token, request_token_secret)
     $access_token = OAuth::AccessToken.new(@consumer, access_token, access_token_secret)
-    
-    if  @request_token.token.empty? && $access_token.token.empty? && has_logged_in == false
+
+    if has_logged_in == false
       has_logged_in = true
       redirect '/signin'
     end
