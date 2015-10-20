@@ -14,17 +14,16 @@ require 'json'
 require 'rufus-scheduler'
 require 'bundler/setup'
 
-
-enable :sessions
 set :port, 9292
 set :public_folder, File.dirname(__FILE__) + '/public'
+
+
 
 @@fetcher = ResultFetcher.new
 @@scheduler = Rufus::Scheduler.new
 @@scheduler.every '30s' do
   @@fetcher.run
 end
-
 
 ###############################################
 ## Project list & general endpoint functions ##
