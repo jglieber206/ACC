@@ -16,9 +16,9 @@ class CreateProject < ActiveRecord::Migration
       t.string :name
       t.integer :project_id
       t.integer :result_id
+      t.string :integration
       t.string :code
       t.string :url
-      t.string :oauth
       t.boolean :last_result
     end
     create_table :capability_maps do |t|
