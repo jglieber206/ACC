@@ -1,26 +1,29 @@
-require 'bundler/setup'
 require 'sinatra'
 require 'sinatra/activerecord'
-require './config/environments'
 require './models/project'
 require './models/attribute'
 require './models/component'
 require './models/capability'
 require './models/capability_map'
 require './models/result'
+require './helpers/result_fetcher'
+require './helpers/jira_integration'
+require './config/environments'
 require 'pg'
 require 'json'
 require 'rufus-scheduler'
-require './helpers/result_fetcher'
+require 'bundler/setup'
 
+set :port, 9292
 set :public_folder, File.dirname(__FILE__) + '/public'
+
+
 
 @@fetcher = ResultFetcher.new
 @@scheduler = Rufus::Scheduler.new
 @@scheduler.every '30s' do
   @@fetcher.run
 end
-
 
 ###############################################
 ## Project list & general endpoint functions ##
@@ -60,7 +63,7 @@ get '/public/:filename' do
 end
 
 #########################
-## Attribute functions ##
+## Attribute routes ##
 #########################
 
 ## Access attributes list for a specified project
@@ -80,7 +83,7 @@ delete '/attributes/:id' do
 end
 
 #########################
-## Component functions ##
+## Component routes ##
 #########################
 
 ## Access components list for a specified project
@@ -99,7 +102,7 @@ delete '/components/:id' do
   component.destroy
 end
 ##########################
-## Capability functions ##
+## Capability routes ##
 ##########################
 
 ## get all capabilities for a project
@@ -148,7 +151,7 @@ end
 
 
 ###################
-## Map functions ##
+## Map routes ##
 ###################
 
 ## get map
