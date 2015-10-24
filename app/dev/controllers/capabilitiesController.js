@@ -7,17 +7,28 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     $scope.currentComponent = null;
     $scope.capsInCell = [];
     $scope.a = [];
+    $scope.previewResponse;
+    // JSON.stringify(mine, null, 2)
+
+    $scope.output = function output(inp) {
+      if (!document.getElementsByTagName('pre')[0]) {
+        document.getElementById("jsonPreview").appendChild(document.createElement('pre')).innerHTML = inp;
+      } else {
+        document.getElementsByTagName('pre')[0].innerHTML = inp;
+      }
+
+    }
 
     $scope.addCapability = function(newCapability, proj_id) {
       $http({
         method: 'POST',
         url: '/attributes/'+$scope.currentAttribute.id+'/components/'+$scope.currentComponent.id,
         data: {
+          integration: newCapability.integration,
           name: newCapability.capabilityName,
           project_id: proj_id,
           code: newCapability.capabilityCode,
-          url: newCapability.capabilityUrl,
-          oauth: newCapability.capabilityOauth
+          url: newCapability.capabilityUrl
         }
       }).success(function(response) {
         $scope.capsInCell.push(response)
@@ -26,11 +37,33 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       });
     }
 
+    $scope.preview = function(newCapability) {
+      $http({
+        method: 'POST',
+        url: '/preview',
+        data: {
+          integration: newCapability.integration,
+          url: newCapability.capabilityUrl
+        }
+      }).success(function(response) {
+        $scope.previewResponse = JSON.stringify(response, null, 2)
+        $scope.output($scope.previewResponse)
+        console.log($scope.previewResponse)
+      }).error(function() {
+        console.log("error getting preview")
+      });
+    }
+
     $scope.updateCapability = function(capability) {
       $http({
         method: 'POST',
         url: '/capabilities/update/' + capability.id,
-        data: { name: capability.name, code: capability.code, url: capability.url, oauth: capability.oauth }
+        data: {
+          integration: capability.integration,
+          name: capability.name,
+          code: capability.code,
+          url: capability.url
+        }
       }).success(function(response) {
         $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1, response);
       }).error(function() {

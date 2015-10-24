@@ -18,6 +18,7 @@ class DatadogMetric
 end
 
 # metric = DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, "avg:mongo_query.avg{mongo_op:find} by {mongo_collection} * sum:mongo_query.count{mongo_op:find} by {mongo_collection}.as_rate()")
+# puts metric.result
 
 class DatadogEvent
   def initialize(start_time, end_time, sources)
@@ -33,5 +34,6 @@ class DatadogEvent
     @response
   end
 end
-
+# 
 # event= DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, "pingdom")
+# puts event.result

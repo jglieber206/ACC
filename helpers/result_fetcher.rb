@@ -12,28 +12,33 @@ class ResultFetcher
     @to_do = {}
   end
 
+  def add(capability)
+    return if @to_do[capability.id]
+    @to_do[capability.id] = capability
+    puts @to_do
+    internal_runner
+  end
+
   def fetch(capability)
     if capability.integration == "jenkins"
+      puts "***** FETCHING FROM JENKINS ********"
       result = Faraday.get(capability.url)
       200 == result.status ? result.body : result.status
     elsif capability.integration == "jira"
+      puts "***** FETCHING FROM JIRA********"
       $access_token.get(capability.url).body
     elsif capability.integration == "dd_event"
+      puts "***** FETCHING FROM DD EVENTS********"
       DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
-    elsif Capability.integration == "dd_metric"
-      DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
+    elsif capability.integration == "dd_metric"
+      puts "***** FETCHING FROM DD METRICS********"
+      DatadogMetric.new(Time.now.to_i - 3600, Time.now.to_i, capability.url).result
     end
   rescue => e
   end
 
-  def run
-    Capability.all.each do |capability|
-      @to_do[capability.id] = capability unless @to_do[capability.id]
-    end
-    internal_runner
-  end
-
   def internal_runner
+    puts @to_do
     @to_do.each do |id, capability|
       test_result = fetch(capability)
       result = ""
@@ -51,9 +56,10 @@ class ResultFetcher
     end
   end
 
-  def add(capability)
-    return if @to_do[capability.id]
-    @to_do[capability.id] = capability
+  def run
+    Capability.all.each do |capability|
+      @to_do[capability.id] = capability unless @to_do[capability.id]
+    end
     internal_runner
   end
 
