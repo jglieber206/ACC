@@ -3,6 +3,7 @@ require_relative '../models/capability'
 require_relative '../models/result'
 require 'faraday'
 require './helpers/jira_integration'
+require './helpers/datadog_integration'
 require 'json'
 
 class ResultFetcher
@@ -11,13 +12,17 @@ class ResultFetcher
     @to_do = {}
   end
 
-  def fetch(url)
-    if url =~ /jenkins.corp.apptentive.com/
-      result = Faraday.get(url)
-      200 == result.status ? result.body : result.status
-    else
-      result = $access_token.get(url)
-      result.body
+  def fetch(capability)
+    case capability.integration
+      when "jenkins"
+        result = Faraday.get(capability.url)
+        200 == result.status ? result.body : result.status
+      when "jira"
+        $access_token.get(capability.url).body
+      when "dd_event"
+        DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
+      when "dd_metric"
+        DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
     end
   rescue => e
   end
@@ -31,7 +36,7 @@ class ResultFetcher
 
   def internal_runner
     @to_do.each do |id, capability|
-      test_result = fetch(capability.url)
+      test_result = fetch(capability)
       result = ""
       begin
         result_hash = JSON.parse(%Q{ #{test_result} })

@@ -21,9 +21,9 @@ def create_capability(name:, project_id:)
   seed_code = '["result"] === "SUCCESS"'
   Capability.create(name: name,
                     project_id: project_id,
+                    integration: "jenkins",
                     code: seed_code,
                     url: seed_url,
-                    oauth: "oauth credentials",
                     last_result: false)
 end
 
