@@ -8,16 +8,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     $scope.capsInCell = [];
     $scope.a = [];
     $scope.previewResponse;
-    // JSON.stringify(mine, null, 2)
-
-    $scope.output = function output(inp) {
-      if (!document.getElementsByTagName('pre')[0]) {
-        document.getElementById("jsonPreview").appendChild(document.createElement('pre')).innerHTML = inp;
-      } else {
-        document.getElementsByTagName('pre')[0].innerHTML = inp;
-      }
-
-    }
 
     $scope.addCapability = function(newCapability, proj_id) {
       $http({
@@ -37,6 +27,14 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       });
     }
 
+    $scope.output = function output(inp) {
+      if (!document.getElementsByTagName('pre')[0]) {
+        document.getElementById("jsonPreview").appendChild(document.createElement('pre')).innerHTML = inp;
+      } else {
+        document.getElementsByTagName('pre')[0].innerHTML = inp;
+      }
+    }
+
     $scope.preview = function(newCapability) {
       $http({
         method: 'POST',
@@ -48,7 +46,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       }).success(function(response) {
         $scope.previewResponse = JSON.stringify(response, null, 2)
         $scope.output($scope.previewResponse)
-        console.log($scope.previewResponse)
       }).error(function() {
         console.log("error getting preview")
       });
@@ -117,7 +114,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       var result = true;
       for (var i = 0; i < caps.length; i++) {
         tmp = caps[i].last_result;
-        // console.log("tmp: "+tmp+" Cap: "+caps[i].name)
         result = result && tmp;
       }
       if (caps.length == 0){

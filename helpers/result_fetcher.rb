@@ -15,30 +15,25 @@ class ResultFetcher
   def add(capability)
     return if @to_do[capability.id]
     @to_do[capability.id] = capability
-    puts @to_do
     internal_runner
   end
 
   def fetch(capability)
-    if capability.integration == "jenkins"
-      puts "***** FETCHING FROM JENKINS ********"
-      result = Faraday.get(capability.url)
-      200 == result.status ? result.body : result.status
-    elsif capability.integration == "jira"
-      puts "***** FETCHING FROM JIRA********"
-      $access_token.get(capability.url).body
-    elsif capability.integration == "dd_event"
-      puts "***** FETCHING FROM DD EVENTS********"
-      DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
-    elsif capability.integration == "dd_metric"
-      puts "***** FETCHING FROM DD METRICS********"
-      DatadogMetric.new(Time.now.to_i - 3600, Time.now.to_i, capability.url).result
+    case capability.integration
+      when "jenkins"
+        result = Faraday.get(capability.url)
+        200 == result.status ? result.body : result.status
+      when "jira"
+        $access_token.get(capability.url).body
+      when "dd_event"
+        DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
+      when "dd_metric"
+        DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
     end
   rescue => e
   end
 
   def internal_runner
-    puts @to_do
     @to_do.each do |id, capability|
       test_result = fetch(capability)
       result = ""
@@ -49,7 +44,6 @@ class ResultFetcher
       rescue => e
          result = false
       end
-      puts result
       capability.last_result = result
       capability.save
       check_result(capability)
