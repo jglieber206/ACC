@@ -13,15 +13,16 @@ class ResultFetcher
   end
 
   def fetch(capability)
-    if capability.integration == "jenkins"
-      result = Faraday.get(capability.url)
-      200 == result.status ? result.body : result.status
-    elsif capability.integration == "jira"
-      $access_token.get(capability.url).body
-    elsif capability.integration == "dd_event"
-      DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
-    elsif Capability.integration == "dd_metric"
-      DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
+    case capability.integration
+      when "jenkins"
+        result = Faraday.get(capability.url)
+        200 == result.status ? result.body : result.status
+      when "jira"
+        $access_token.get(capability.url).body
+      when "dd_event"
+        DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
+      when "dd_metric"
+        DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
     end
   rescue => e
   end
@@ -44,7 +45,6 @@ class ResultFetcher
       rescue => e
          result = false
       end
-      puts result
       capability.last_result = result
       capability.save
       check_result(capability)
