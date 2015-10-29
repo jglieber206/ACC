@@ -1,21 +1,19 @@
 <div class="sidebar" ng-init="getProjects()">
-  <div class="projectList">
-    <h2>Project list</h2>
-    <ul ng-repeat="project in projectList">
-      <li><a href="" ng-click="openProject(project.id)">{{project.name}}</li>
-      <li><a href="" ng-click="deleteProject(project.id)">Delete</li>
-    </ul>
-  </div>
 
-  <button ng-click="showform=true" ng-hide="showform">Add</button>
-  <div ng-show="showform">
-    <form class="new_project" ng-submit="addProject()">
-      <td colspan="2">
-        New project name: <input ng-model="newProject" type="text"><br>
-        <input type="submit" value="Create Project" ng-show="showform" ng-click="showform=false"><br>
-        <a href="" ng-click="showform=false" ng-show="showform">Cancel</a>
-      </td>
+  <div class="projects">
+    <div class="project-listing" ng-repeat="project in projectList">
+      <button href="" ng-click="openProject(project.id)">{{project.name}}</button><br>
+    </div>
+  <a href="" class="add-project" ng-click="project.editing=true" >Add</a>
+
+  <div ng-if="project.editing==true">
+    <form class="new-project">
+      <label for="projectName">Name</label>
+      <input id="projectName" ng-model="project.name" type="text">
+      <input type="submit" value="Add Project" ng-click="addProject(project);project.editing=false"></input>
+      <a href="" ng-click="project.editing=false">Cancel</a>
     </form>
+  </div>
   </div>
 
 </div>

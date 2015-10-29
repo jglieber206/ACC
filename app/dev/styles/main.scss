@@ -1,0 +1,64 @@
+html{
+  height:100%;
+}
+
+body{
+  height: 97.5%;
+  margin: 0
+}
+
+.main {
+  background-color: #E5EAEC;
+  background-image: url('http://localhost:9292/bg-tl.png'), url('http://localhost:9292/bg-br.png');
+  background-size: 725px 247px, 329px 248px;
+  background-position: top left, bottom right;
+  background-repeat: no-repeat;
+  height: auto;
+  min-height: 90%;
+  padding-bottom: 5em;
+
+  .tableSettings {
+    img {
+      margin: 2.2em 1em 0 0;
+      height: 30px;
+      width:30px;
+      display: inline-block;
+      float: right;
+    }
+  }
+
+  .projectName {
+    margin: 1em .5em 0 0;
+    padding-bottom: .5em;
+    display: inline-block;
+    float:right;
+  }
+
+  .project {
+    margin: auto;
+    width: 75%;
+    .table-container{
+      width: 90%;
+      margin: 0 auto 0 auto;
+      padding-top: 0em;
+      #grid{
+        margin: auto;
+        tr {
+          th{
+            font-size: 20px;
+            text-align:center;
+            width: 120px;
+            height: 120px;
+            vertical-align: bottom;
+            padding-bottom: 10px;
+          }
+          .tableCell {
+            box-shadow: 6px 4px 8px 2px rgba(0,0,0,0.34);
+            border-radius: 6px;
+            text-align: center
+          }
+        }
+      }
+    }
+  }
+}

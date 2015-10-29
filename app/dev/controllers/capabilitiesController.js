@@ -51,6 +51,10 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       });
     }
 
+    $scope.clearPreview = function() {
+      document.getElementsByTagName('pre')[0].innerHTML = "";
+    }
+
     $scope.updateCapability = function(capability) {
       $http({
         method: 'POST',
@@ -110,6 +114,11 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       return a;
     }
 
+    $scope.saveMe = function(){
+      capabilitiesInCell = []
+
+    }
+
     $scope.colorCell = function(caps) {
       var result = true;
       for (var i = 0; i < caps.length; i++) {
@@ -158,10 +167,12 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
 
     $scope.history = [];
     $scope.getHistory = function(project) {
+      console.log("starting history")
       $http({
         method: 'GET',
         url: '/capabilites/results/' + project.id
       }).success(function (data) {
+        console.log(data)
         $scope.history = data;
       }).error(function() {console.log("Could not get history")})
     }

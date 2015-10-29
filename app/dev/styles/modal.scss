@@ -5,7 +5,6 @@
 	right: 25%;
 	bottom: 10%;
 	left: 25%;
-	background: rgba(0,0,0,0.8);
 	z-index: 99999;
 	opacity:0;
 	-webkit-transition: opacity 400ms ease-in;
@@ -15,10 +14,43 @@
   border: 1px solid black;
   overflow: scroll;
 
+	background-color: #E5EAEC;
+	background-image: url('http://localhost:9292/bg-br.png');
+	background-size: 329px 248px;
+	background-position: bottom right;
+	background-repeat: no-repeat;
+	height: auto;
+	min-height: 90%;
+	// padding-bottom: 5em;
+
+	.new-capabilitiy-form {
+		input{
+			margin: 0;
+			padding: 0;
+		}
+		label{
+			margin: 0;
+			padding: 0;
+		}
+		.form-buttons {
+			button {
+			display: inline-block;
+			}
+		}
+	}
+
 	.capability-listing{
 		margin: auto;
 		margin-bottom: 2em;
 		border: 1px solid black;
+		border-radius: 6px;
+		width: 85%;
+		img {
+			height: 30px;
+			width:30px;
+			float: right;
+			margin-top: -2em;
+		}
 	}
 }
 

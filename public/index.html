@@ -8,18 +8,21 @@
   </head>
   <body ng-controller="ProjectsListController">
     <div sidebar-directive></div>
-    <div ng-controller="CapabilitiesController">
+    <div class="main" ng-controller="CapabilitiesController">
+      <a class="tableSettings" href="" ng-click="edit_table=true">
+        <img src="http://localhost:9292/gear.png"></img>
+      </a>
+      <h1 class="projectName">{{project.name}}</h1>
       <div class="project" ng-init="openProject(1); getAttributes(1); getComponents(1)">
-        <h1>{{project.name}}</h1>
-        <div project-table-directive></div>
-        <div>
-          <h4><a href="" ng-click="edit_table=true" ng-hide="edit_table">Edit Table</a></h4>
-          <div class="attr_comp_list" ng-show="edit_table" col="2">
-            <div attributes-directive></div>
-            <div components-directive></div>
-            <br>
-            <button ng-click="edit_table=false" ng-show="edit_table">Close</button>
-          </div>
+        <div class="table-container" project-table-directive>
+        </div>
+
+        <div class="attr-comp-list" ng-show="edit_table" col="2">
+          <div attributes-directive></div>
+          <div components-directive></div>
+          <br>
+          <button ng-click="edit_table=false" ng-show="edit_table">Close</button>
+          <button ng-click="deleteProject(project)">Delete</button>
         </div>
         <div capabilities-directive></div>
       </div>

@@ -5,6 +5,7 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
 
   $scope.projectList = [];
   $scope.project = [];
+  $scope.project.editing = false;
 
   $scope.getProjects = function() {
     $http({
@@ -17,6 +18,7 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
   }
 
   $scope.openProject = function(id) {
+    console.log(id)
     $http({
       method: 'GET',
       url: '/projects/' + id
@@ -29,24 +31,38 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
     })
     .error(function() { console.log("error") });
   }
-  $scope.addProject = function() {
+
+  $scope.addProject = function(project) {
     $http({
       method: 'POST',
       url: '/projects',
-      data: this.newProject
-    }).success(function() {
-      $scope.getProjects();
+      data: {
+        name: project.name
+      }
+    }).success(function(response) {
+      $scope.projectList.push(response);
     })
     .error(function() { console.log("error") });
   }
-  $scope.deleteProject = function(id) {
+
+  $scope.deleteProject = function(project) {
     $http({
       method: 'DELETE',
-      url: '/projects/' + id
+      url: '/projects/' + project.id
     }).success(function() {
-      $scope.getProjects();
+      console.log(project)
+      $scope.projectList.splice($scope.projectList.indexOf(project), 1)
     })
     .error(function() { console.log("error") });
+  }
+
+  $scope.togleEdit = function(editing) {
+    if (editing) {
+      editing = false;
+    } else {
+      editing = true;
+    }
+    return editing
   }
 
 }]);
