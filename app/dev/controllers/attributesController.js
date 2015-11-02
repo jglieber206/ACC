@@ -12,7 +12,7 @@ app.controller('AttributesController', ['$scope', '$http', '$rootScope', functio
     }).success(function() {
       $scope.openProject(id)
      })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
   $scope.deleteAttribute = function(databaseid) {
     $http({
@@ -22,7 +22,7 @@ app.controller('AttributesController', ['$scope', '$http', '$rootScope', functio
       var index = $rootScope.attributesList.map(function(e) { return e.id; }).indexOf(databaseid);
       $rootScope.attributesList.splice(index, 1);
     })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
 
 }]);

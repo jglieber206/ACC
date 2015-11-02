@@ -18,8 +18,14 @@
         <input id="capabilityCode" ng-model="capability.code" type="text">
         <label for="capabilityUrl">URL</label>
         <input id="capabilityUrl" ng-model="capability.url" type="text">
-        <label for="capabilityOauth">OAuth</label>
-        <input id="capabilityOauth" ng-model="capability.oauth" type="text">
+        <label for="capabilityIntegration">Type</label>
+        <select>
+          <option value="jira">Jira</option>
+          <option value="jenkins">Jenkins</option>
+          <option value="dd_event">DataDog Event</option>
+          <option value="dd_metric">DataDog Metric</option>
+        </select>
+        <input id="capabilityIntegration" ng-model="capability.integration" type="text">
         <input type="submit" value="Save Changes" ng-click="updateCapability(capability); toggleEditing(capability)">
       </form>
       <button ng-click="toggleEditing(capability)" ng-if="!capability.editing">Edit Capabilities</button>
@@ -37,15 +43,25 @@
   </ul>
 
   <form class="new-capabilitiy-form">
+    <label for="newCapabilityIntegration">Type</label>
+    <select id="newCapabilityIntegration" ng-model="newCapability.integration">
+      <option value="jira">Jira</option>
+      <option value="jenkins">Jenkins</option>
+      <option value="dd_event">DataDog Event</option>
+      <option value="dd_metric">DataDog Metric</option>
+    </select><br><br>
     <label for="newCapabilityName">Name</label>
     <input id="newCapabilityName" ng-model="newCapability.capabilityName" type="text"></p>
     <label for="newCapabilityCode">Code</label>
     <input id="newCapabilityCode" ng-model="newCapability.capabilityCode" type="text"></p>
     <label for="newCapabilityUrl">URL</label>
     <input id="newCapabilityUrl" ng-model="newCapability.capabilityUrl" type="text"></p>
-    <label for="newCapabilityOauth">Oauth</label>
-    <input id="newCapabilityOauth" ng-model="newCapability.capabilityOauth" type="text"></p>
     <input type="submit" value="Add Capability" ng-click="addCapability(newCapability, project.id)"><br>
+
+    <button name="preivew" ng-click="preview(newCapability)">Preview</button>
   </form>
 
+  <div id="jsonPreview">
+
+  </div>
 </div>

@@ -13,7 +13,7 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
     }).success(function(response) {
       $scope.projectList = response;
     })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
 
   $scope.openProject = function(id) {
@@ -27,7 +27,7 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
       $rootScope.getProjectCapabilities(id);
       $rootScope.getMap(id);
     })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
   $scope.addProject = function() {
     $http({
@@ -37,7 +37,7 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
     }).success(function() {
       $scope.getProjects();
     })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
   $scope.deleteProject = function(id) {
     $http({
@@ -46,7 +46,7 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
     }).success(function() {
       $scope.getProjects();
     })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
 
 }]);

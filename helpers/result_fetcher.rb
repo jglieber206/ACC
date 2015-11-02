@@ -12,6 +12,12 @@ class ResultFetcher
     @to_do = {}
   end
 
+  def add(capability)
+    return if @to_do[capability.id]
+    @to_do[capability.id] = capability
+    internal_runner
+  end
+
   def fetch(capability)
     case capability.integration
       when "jenkins"
@@ -25,13 +31,6 @@ class ResultFetcher
         DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
     end
   rescue => e
-  end
-
-  def run
-    Capability.all.each do |capability|
-      @to_do[capability.id] = capability unless @to_do[capability.id]
-    end
-    internal_runner
   end
 
   def internal_runner
@@ -51,9 +50,10 @@ class ResultFetcher
     end
   end
 
-  def add(capability)
-    return if @to_do[capability.id]
-    @to_do[capability.id] = capability
+  def run
+    Capability.all.each do |capability|
+      @to_do[capability.id] = capability unless @to_do[capability.id]
+    end
     internal_runner
   end
 

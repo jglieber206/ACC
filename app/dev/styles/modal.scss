@@ -52,4 +52,10 @@
 	box-shadow: 1px 1px 3px #000;
 }
 
-.close:hover { background: #00d9ff; }
+.close:hover {
+	background: #00d9ff;
+}
+
+#jsonPreview {
+	text-align: left;
+}

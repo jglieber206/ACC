@@ -21,13 +21,21 @@ set :public_folder, File.dirname(__FILE__) + '/public'
 
 @@fetcher = ResultFetcher.new
 @@scheduler = Rufus::Scheduler.new
-@@scheduler.every '7s' do
+@@scheduler.every '30s' do
   @@fetcher.run
 end
 
 ###############################################
 ## Project list & general endpoint functions ##
 ###############################################
+
+#  preview
+post '/preview' do
+  Struct.new("Preview", :url, :integration)
+  data = JSON.parse request.body.read
+  capability = Struct::Preview.new(data["url"], data["integration"])
+  @@fetcher.fetch(capability)
+end
 
 ## Get all projects
 get '/projects' do
@@ -123,7 +131,7 @@ end
 ## add new capability to attribute/component intersection
 post '/attributes/:attr_id/components/:comp_id' do
   data = JSON.parse request.body.read
-  new_capability = Capability.new(name: data['name'], project_id: data['project_id'], code: data['code'], url: data['url'], oauth: data['oauth'])
+  new_capability = Capability.new(name: data['name'], project_id: data['project_id'], code: data['code'], url: data['url'], integration: data['integration'])
   new_capability.save
   @@fetcher.add(new_capability)
   CapabilityMap.new(project_id: data['project_id'], attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id).save
@@ -134,7 +142,7 @@ end
 post '/capabilities/update/:id' do
   data = JSON.parse request.body.read
   capability = Capability.find(params['id'])
-  capability.update(name: data['name'], code: data['code'], url: data['url'], oauth: data['oauth'])
+  capability.update(name: data['name'], code: data['code'], url: data['url'], integration: data['integration'])
   capability.to_json
 end
 
@@ -146,7 +154,7 @@ delete '/capabilities/:id' do
 end
 
 get '/capabilites/results/:id' do
-  Result.where(project_id: params['id']).limit(1000).order(time: :desc).to_json
+  Result.where(project_id: params['id']).limit(1000).order(time_start: :desc).to_json
 end
 
 
