@@ -31,20 +31,9 @@ end
 
 #  preview
 post '/preview' do
-  class Preview
-    def initialize (url, integration)
-      @url = url
-      @integration = integration
-    end
-    def url
-      @url
-    end
-    def integration
-      @integration
-    end
-  end
+  Struct.new("Preview", :url, :integration)
   data = JSON.parse request.body.read
-  capability = Preview.new(data["url"], data["integration"])
+  capability = Struct::Preview.new(data["url"], data["integration"])
   @@fetcher.fetch(capability)
 end
 
