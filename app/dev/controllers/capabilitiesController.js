@@ -23,7 +23,7 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       }).success(function(response) {
         $scope.capsInCell.push(response)
       }).error(function() {
-        console.log("error adding capability")
+        window.console && console.log("error adding capability")
       });
     }
 
@@ -47,7 +47,7 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
         $scope.previewResponse = JSON.stringify(response, null, 2)
         $scope.output($scope.previewResponse)
       }).error(function() {
-        console.log("error getting preview")
+        window.console && console.log("error getting preview")
       });
     }
 
@@ -68,7 +68,7 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       }).success(function(response) {
         $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1, response);
       }).error(function() {
-        console.log("error adding capability")
+        window.console && console.log("error adding capability")
       });
     }
 
@@ -80,7 +80,7 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       .success(function(capability) {
         $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1)
        }).error(function() {
-         console.log("error deleting capability")
+         window.console && console.log("error deleting capability")
        });
     }
 
@@ -112,11 +112,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       $scope.colorCell(a);
       $scope.a = a;
       return a;
-    }
-
-    $scope.saveMe = function(){
-      capabilitiesInCell = []
-
     }
 
     $scope.colorCell = function(caps) {
@@ -166,15 +161,14 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     }
 
     $scope.history = [];
-    $scope.getHistory = function(project) {
+    $scope.getHistory = function(capability) {
       console.log("starting history")
       $http({
         method: 'GET',
-        url: '/capabilites/results/' + project.id
+        url: '/capabilites/results/' + capability.id
       }).success(function (data) {
-        console.log(data)
         $scope.history = data;
-      }).error(function() {console.log("Could not get history")})
+      }).error(function() {window.console && console.log("Could not get history")})
     }
 
 }]);

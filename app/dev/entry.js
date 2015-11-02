@@ -13,7 +13,6 @@ require('./directives/attributes/attributesDirective.js')
 require('./directives/components/componentsDirective.js')
 
 //styles
-// require('./styles/skeleton.css');
 require('./styles/main.scss');
 require('./styles/modal.scss');
 require('./styles/capabilities.scss');

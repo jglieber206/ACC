@@ -31,20 +31,9 @@ end
 
 #  preview
 post '/preview' do
-  class Preview
-    def initialize (url, integration)
-      @url = url
-      @integration = integration
-    end
-    def url
-      @url
-    end
-    def integration
-      @integration
-    end
-  end
+  Struct.new("Preview", :url, :integration)
   data = JSON.parse request.body.read
-  capability = Preview.new(data["url"], data["integration"])
+  capability = Struct::Preview.new(data["url"], data["integration"])
   @@fetcher.fetch(capability)
 end
 
@@ -167,7 +156,7 @@ delete '/capabilities/:id' do
 end
 
 get '/capabilites/results/:id' do
-  return Result.where(project_id: params['id'], result: false).limit(1000).order(time_start: :desc).to_json
+  return Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
 end
 
 

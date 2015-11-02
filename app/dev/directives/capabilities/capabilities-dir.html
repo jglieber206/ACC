@@ -1,14 +1,13 @@
-<div ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog" ng-init="getHistory(project)">
+<div ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog">
   <a href="#close" ng-click="openProject(project.id);clearPreview()" title="Close" class="close">X</a>
   <h3>{{currentComponent.name}} + {{currentAttribute.name}}</h3>
 
   <div class="capability-listing" ng-repeat="capability in capsInCell">
     <div>{{capability.name}}</div>
     <div>Last Result:  {{capability.last_result}}</div>
-    <!-- <div>Failing Since: -->
-      <!-- <span>{{history[0].time_start*1000 | date:'medium'}}</span> -->
-      <!-- <span ng-if="!capability.last_failure">No failures</span> -->
-    <!-- </div> -->
+    <div ng-init="getHistory(capability)">Since:
+      <span>{{history[0].time_start*1000 | date:'medium'}}</span>
+    </div>
 
     <form ng-if="capability.editing">
       <label for="capabilityIntegration">Type</label>
@@ -27,7 +26,7 @@
       <input type="submit" value="Save Changes" ng-click="updateCapability(capability); toggleEditing(capability)">
     </form>
     <div class="form-buttons">
-      <a ng-click="toggleEditing(capability)" ng-if="!capability.editing"><img src="http://localhost:9292/gear.png"></a>
+      <a ng-click="toggleEditing(capability)" ng-if="!capability.editing"><img src="http://localhost:9292/img/gear.png"></a>
       <button ng-click="toggleEditing(capability)" ng-if="capability.editing">Cancel</button>
       <button ng-click="deleteCapability(capability)" ng-if="capability.editing">Delete Capability</button>
     </div>

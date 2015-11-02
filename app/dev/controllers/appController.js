@@ -13,7 +13,7 @@ var appController = app.controller('appController', ['$http', '$rootScope', func
       method: 'GET',
       url: '/projects/' + id + '/attributes'
     }).success(function(response) { $rootScope.attributesList = response })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
 
   $rootScope.getComponents = function(id) {
@@ -21,7 +21,7 @@ var appController = app.controller('appController', ['$http', '$rootScope', func
       method: 'GET',
       url: '/projects/' + id + '/components'
     }).success(function(response) { $rootScope.componentsList = response })
-    .error(function() { console.log("error") });
+    .error(function() { window.console && console.log("error") });
   }
 
   $rootScope.getCurrentComp = function(comp_id) {
@@ -34,7 +34,7 @@ var appController = app.controller('appController', ['$http', '$rootScope', func
       method: 'GET',
       url: '/projects/' + id + '/capabilities'
     }).success(function(response) { $rootScope.projectCapabilities = response })
-    .error(function() { console.log("error returning capabilities") });
+    .error(function() { window.console && console.log("error returning capabilities") });
   }
 
   $rootScope.getMap = function(id) {
