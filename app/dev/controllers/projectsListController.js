@@ -55,15 +55,6 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
     .error(function() { window.console && console.log("error") });
   }
 
-  $scope.togleEdit = function(editing) {
-    if (editing) {
-      editing = false;
-    } else {
-      editing = true;
-    }
-    return editing
-  }
-
 }]);
 
 module.exports = projectsListController;

@@ -24,7 +24,11 @@ module.exports = {
       {
         test: /\.scss$/,
         loader: "style!css!sass"
-      }
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: "file-loader?name=img/img-[hash:6].[ext]"
+      },
     ]
   }
 

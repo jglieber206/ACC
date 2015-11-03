@@ -152,11 +152,11 @@ delete '/capabilities/:id' do
   map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
   map.destroy_all
-  return capability
+  capability
 end
 
 get '/capabilites/results/:id' do
-  return Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
+  Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
 end
 
 

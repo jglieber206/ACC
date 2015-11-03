@@ -8,8 +8,8 @@ body{
 }
 
 .main {
+  background-image: url('../../../public/img/bg-tl.png'), url('../../../public/img/bg-br.png');
   background-color: #E5EAEC;
-  background-image: url('http://localhost:9292/img/bg-tl.png'), url('http://localhost:9292/img/bg-br.png');
   background-size: 725px 247px, 329px 248px;
   background-position: top left, bottom right;
   background-repeat: no-repeat;
