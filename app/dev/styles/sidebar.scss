@@ -1,0 +1,18 @@
+.sidebar {
+  width: 100%;
+  background-color: rgb(239, 66, 74);
+  .projects {
+    margin-left: 40%;
+    width: 50%;
+    .project-listing {
+      margin: 2em 1em 2em 1em;
+      display: inline-block;
+      button{
+        font-size: 12px;
+      }
+    }
+  }
+  .add-project {
+    float:right;
+  }
+}

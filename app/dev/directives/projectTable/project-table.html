@@ -6,21 +6,18 @@
     </tr>
     <tr ng-repeat="component in componentsList">
       <th>{{component.name}}</th>
-      <td ng-repeat="attribute in attributesList" ng-style="{'background-color': cellColor}">
+      <td ng-repeat="attribute in attributesList" ng-init="getCellCapabilities(attribute.id, component.id)" class="tableCell" ng-style="{'background-color': cellColor}">
         <a href="#openModal">
-          <button
-            ng-click="
-              cellCapList(getCellCapabilities(attribute.id, component.id));
-              showCapList();
-              textStyle={'color': cellColor};
-              getCurrentAttr(attribute.id);
-              getCurrentComp(component.id);" >
-            {{getCellCapabilities(attribute.id, component.id).length}}
-          </button>
+          <div ng-click="
+          cellCapList(getCellCapabilities(attribute.id, component.id));
+          showCapList();
+          getCurrentAttr(attribute.id);
+          getCurrentComp(component.id);" >
+            <button>
+              {{getCellCapabilities(attribute.id, component.id)[0].name}}
+            </button>
+          </div>
         </a>
-        <ul>
-          <li ng-repeat="cap in a">{{cap.name}}</li>
-        </ul>
       </td>
     </tr>
   </table>

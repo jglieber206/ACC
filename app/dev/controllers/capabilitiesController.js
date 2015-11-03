@@ -51,6 +51,10 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
       });
     }
 
+    $scope.clearPreview = function() {
+      document.getElementsByTagName('pre')[0].innerHTML = "";
+    }
+
     $scope.updateCapability = function(capability) {
       $http({
         method: 'POST',
@@ -157,10 +161,11 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     }
 
     $scope.history = [];
-    $scope.getHistory = function(project) {
+    $scope.getHistory = function(capability) {
+      console.log("starting history")
       $http({
         method: 'GET',
-        url: '/capabilites/results/' + project.id
+        url: '/capabilites/results/' + capability.id
       }).success(function (data) {
         $scope.history = data;
       }).error(function() {window.console && console.log("Could not get history")})

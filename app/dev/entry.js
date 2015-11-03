@@ -13,5 +13,8 @@ require('./directives/attributes/attributesDirective.js')
 require('./directives/components/componentsDirective.js')
 
 //styles
+require('./styles/main.scss');
 require('./styles/modal.scss');
 require('./styles/capabilities.scss');
+require('./styles/sidebar.scss');
+require('./styles/table-settings.scss');

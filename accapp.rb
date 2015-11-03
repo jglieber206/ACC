@@ -21,7 +21,7 @@ set :public_folder, File.dirname(__FILE__) + '/public'
 
 @@fetcher = ResultFetcher.new
 @@scheduler = Rufus::Scheduler.new
-@@scheduler.every '30s' do
+@@scheduler.every '60s' do
   @@fetcher.run
 end
 
@@ -49,14 +49,15 @@ end
 
 ## Add new project
 post '/projects' do
-  payload = request.body.read
-  new_project = Project.new(name: payload)
+  payload = JSON.parse request.body.read
+  new_project = Project.new(name: payload["name"])
   new_project.save
+  new_project.to_json
 end
 
 ## Delete specific project (including all properties of project)
 delete '/projects/:id' do
-  project = Project.find(params['id'].to_i)
+  project = Project.find(params['id'])
   project.destroy
 end
 
@@ -151,10 +152,11 @@ delete '/capabilities/:id' do
   map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
   map.destroy_all
+  capability
 end
 
 get '/capabilites/results/:id' do
-  Result.where(project_id: params['id']).limit(1000).order(time_start: :desc).to_json
+  Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
 end
 
 
