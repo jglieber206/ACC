@@ -2,7 +2,7 @@
 
   <div class="projects">
     <div class="project-listing" ng-repeat="project in projectList">
-      <button href="" ng-click="openProject(project.id)">{{project.name}}</button><br>
+      <a ng-href="http://localhost:9292?project={{project.id}}" ng-click="openProject(project.id)">{{project.name}}</a>
     </div>
   <a href="" class="add-project" ng-click="project.editing=true" >Add</a>
 

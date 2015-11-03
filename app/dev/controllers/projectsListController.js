@@ -32,6 +32,8 @@ var projectsListController = app.controller('ProjectsListController', ['$scope',
     .error(function() { window.console && console.log("error") });
   }
 
+  setInterval(function(){ $scope.openProject($rootScope.QueryString.project); }, 300000);
+
   $scope.addProject = function(project) {
     $http({
       method: 'POST',
