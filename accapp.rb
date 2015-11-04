@@ -17,11 +17,9 @@ require 'bundler/setup'
 set :port, 9292
 set :public_folder, File.dirname(__FILE__) + '/public'
 
-
-
 @@fetcher = ResultFetcher.new
 @@scheduler = Rufus::Scheduler.new
-@@scheduler.every '60s' do
+@@scheduler.every '300s' do
   @@fetcher.run
 end
 
@@ -144,6 +142,7 @@ post '/capabilities/update/:id' do
   data = JSON.parse request.body.read
   capability = Capability.find(params['id'])
   capability.update(name: data['name'], code: data['code'], url: data['url'], integration: data['integration'])
+  @@fetcher.add(capability)
   capability.to_json
 end
 
@@ -158,7 +157,6 @@ end
 get '/capabilites/results/:id' do
   Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
 end
-
 
 ###################
 ## Map routes ##
