@@ -18,6 +18,8 @@ GEM
     builder (3.2.2)
     daemons (1.2.3)
     diff-lcs (1.2.5)
+    dogapi (1.20.0)
+      multi_json
     eventmachine (1.0.8)
     execjs (2.6.0)
     faraday (0.9.1)
@@ -69,6 +71,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   bundler
+  dogapi
   execjs
   faraday
   multi_json
