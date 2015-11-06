@@ -14,6 +14,8 @@ require 'json'
 require 'rufus-scheduler'
 require 'bundler/setup'
 
+set :bind, '0.0.0.0'
+set :server, 'thin'
 set :port, 9292
 set :public_folder, File.dirname(__FILE__) + '/public'
 
