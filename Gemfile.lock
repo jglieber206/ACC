@@ -20,6 +20,7 @@ GEM
     diff-lcs (1.2.5)
     dogapi (1.20.0)
       multi_json
+    dotenv (2.0.2)
     eventmachine (1.0.8)
     execjs (2.6.0)
     faraday (0.9.1)
@@ -72,6 +73,7 @@ DEPENDENCIES
   activerecord
   bundler
   dogapi
+  dotenv
   execjs
   faraday
   multi_json
