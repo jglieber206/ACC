@@ -4,4 +4,8 @@ public/bundle.js.map
 npm-debug.log
 rsa.pem
 datadog_keys.txt
-config
+.env
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
