@@ -1,5 +1,5 @@
 development:
-  adapter:  <%= ENV['DB_ADAPTER'] %>
+  adapter:  postgresql
   database: <%= ENV['DB_DATABASE'] %>
   port:     <%= ENV['DB_PORT'] %>
   username: <%= ENV['DB_USERNAME'] %>
