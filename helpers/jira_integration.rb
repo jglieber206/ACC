@@ -14,7 +14,7 @@ if has_logged_in == false
     oauth ||= {}
     @consumer ||= OAuth::Consumer.new(
       'apptentive',
-      OpenSSL::PKey::RSA.new(ENV['JIRA_PRIVATE_KEY']),
+      OpenSSL::PKey::RSA.new(IO.read(File.dirname(__FILE__) + "/../acc-jira.pem")),
       {
       :site => 'https://apptentive.atlassian.net',
       :signature_method => 'RSA-SHA1',
