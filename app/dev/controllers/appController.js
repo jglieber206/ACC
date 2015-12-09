@@ -59,7 +59,6 @@ var appController = app.controller('appController', ['$http', '$rootScope', func
         query_string[pair[0]].push(decodeURIComponent(pair[1]));
       }
     }
-      console.log(query_string);
       return query_string;
   }();
 
