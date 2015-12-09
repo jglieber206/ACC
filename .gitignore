@@ -1,9 +1,12 @@
 node_modules
 npm-debug.log
 rsa.pem
+acc-jira.pem
 datadog_keys.txt
 .env
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+*./bundle.js
+*./bundle.js.map

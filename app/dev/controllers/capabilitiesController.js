@@ -52,7 +52,9 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     }
 
     $scope.clearPreview = function() {
-      document.getElementsByTagName('pre')[0].innerHTML = "";
+      if (document.getElementsByTagName('pre')[0]) {
+        document.getElementsByTagName('pre')[0].innerHTML = "";
+      }
     }
 
     $scope.updateCapability = function(capability) {
@@ -85,13 +87,20 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     }
 
     $scope.getCurrentAttr = function(attr_id) {
-      attrIndex = getIndexById(attr_id, $scope.attributesList);
-      $scope.currentAttribute = $scope.attributesList[attrIndex];
+      index = $scope.componentsList.map(function(obj, index) {
+      if(obj.id == attr_id) {
+        return index;
+      }}).filter(isFinite)
+      $scope.currentAttribute = $scope.attributesList[index];
     }
 
     $scope.getCurrentComp = function(comp_id) {
-      compIndex = getIndexById(comp_id, $scope.attributesList);
-      $scope.currentComponent = $scope.componentsList[compIndex];
+      index = $scope.componentsList.map(function(obj, index) {
+      if(obj.id == comp_id) {
+        return index;
+      }}).filter(isFinite)
+      $scope.currentComponent = $scope.componentsList[index];
+
     }
 
 
@@ -162,7 +171,6 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
 
     $scope.history = [];
     $scope.getHistory = function(capability) {
-      console.log("starting history")
       $http({
         method: 'GET',
         url: '/capabilites/results/' + capability.id
