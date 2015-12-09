@@ -87,7 +87,7 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
     }
 
     $scope.getCurrentAttr = function(attr_id) {
-      index = $scope.componentsList.map(function(obj, index) {
+      index = $scope.attributesList.map(function(obj, index) {
       if(obj.id == attr_id) {
         return index;
       }}).filter(isFinite)
