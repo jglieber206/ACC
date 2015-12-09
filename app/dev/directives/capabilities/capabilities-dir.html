@@ -26,7 +26,7 @@
       <input type="submit" value="Save Changes" ng-click="updateCapability(capability); toggleEditing(capability)">
     </form>
     <div class="form-buttons">
-      <a ng-click="toggleEditing(capability)" ng-if="!capability.editing"><img src="http://localhost:9292/img/gear.png"></a>
+      <a ng-click="toggleEditing(capability)" ng-if="!capability.editing"><img src="/img/gear.png"></a>
       <button ng-click="toggleEditing(capability)" ng-if="capability.editing">Cancel</button>
       <button ng-click="deleteCapability(capability)" ng-if="capability.editing">Delete Capability</button>
     </div>
