@@ -26,6 +26,8 @@ set :public_folder, File.dirname(__FILE__) + '/public'
   @@fetcher.run
 end
 
+after { ActiveRecord::Base.connection.close }
+
 ###############################################
 ## Project list & general endpoint functions ##
 ###############################################
