@@ -47,7 +47,9 @@ end
 
 ## Get project by id
 get '/projects/:id' do
-  Project.find(params['id'].to_i).to_json
+  if params['id'].to_i != 0
+    Project.find(params['id'].to_i).to_json
+  end
 end
 
 ## Add new project
@@ -80,7 +82,9 @@ end
 
 ## Access attributes list for a specified project
 get '/projects/:id/attributes' do
-  Attribute.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    Attribute.where(project_id: params['id']).all.to_json
+  end
 end
 
 post '/projects/:id/attributes' do
@@ -100,7 +104,9 @@ end
 
 ## Access components list for a specified project
 get '/projects/:id/components' do
-  Component.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    Component.where(project_id: params['id']).all.to_json
+  end
 end
 
 post '/projects/:id/components' do
@@ -119,7 +125,9 @@ end
 
 ## get all capabilities for a project
 get '/projects/:id/capabilities' do
-  Capability.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    Capability.where(project_id: params['id']).all.to_json
+  end
 end
 
 ## get capabilities for an attribute/component intersection
@@ -169,5 +177,7 @@ end
 
 ## get map
 get '/projects/:id/capability_maps' do
-  CapabilityMap.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    CapabilityMap.where(project_id: params['id']).all.to_json
+  end
 end

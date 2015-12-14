@@ -8,8 +8,6 @@ require 'json'
 
 class ResultFetcher
 
-  after { ActiveRecord::Base.connection.close }
-  
   def initialize
     @to_do = {}
   end
