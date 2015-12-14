@@ -8,3 +8,5 @@ datadog_keys.txt
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+*/bundle.js
+*/bundle.js.map
