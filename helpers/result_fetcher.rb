@@ -45,10 +45,12 @@ class ResultFetcher
   end
 
   def run
-    Capability.all.each do |capability|
-      @to_do[capability.id] = capability unless @to_do[capability.id]
+    ActiveRecord::Base.connection_pool.with_connection do
+      Capability.all.each do |capability|
+        @to_do[capability.id] = capability unless @to_do[capability.id]
+      end
+      internal_runner
     end
-    internal_runner
   end
 
   def check_result (capability)
