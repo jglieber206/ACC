@@ -146,7 +146,6 @@ post '/attributes/:attr_id/components/:comp_id' do
   data = JSON.parse request.body.read
   new_capability = Capability.new(name: data['name'], project_id: data['project_id'], code: data['code'], url: data['url'], integration: data['integration'])
   new_capability.save
-  @@fetcher.add(new_capability)
   CapabilityMap.new(project_id: data['project_id'], attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id).save
   new_capability.to_json
 end
@@ -156,7 +155,6 @@ post '/capabilities/update/:id' do
   data = JSON.parse request.body.read
   capability = Capability.find(params['id'])
   capability.update(name: data['name'], code: data['code'], url: data['url'], integration: data['integration'])
-  @@fetcher.add(capability)
   capability.to_json
 end
 

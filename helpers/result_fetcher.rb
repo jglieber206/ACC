@@ -12,12 +12,6 @@ class ResultFetcher
     @to_do = {}
   end
 
-  def add(capability)
-    return if @to_do[capability.id]
-    @to_do[capability.id] = capability
-    internal_runner
-  end
-
   def fetch(capability)
     case capability.integration
       when "jenkins"
