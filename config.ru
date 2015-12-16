@@ -1,5 +1,14 @@
 # config.ru
-require 'bundler'
 require 'rubygems'
-require './app'
-run AccApp
+require 'bundler'
+require 'raven'
+require 'sinatra'
+require './accapp'
+
+Raven.configure() do |config|
+  config.dsn = ENV['SENTRY']
+end
+
+use Raven::Rack
+
+run Sinatra::Application

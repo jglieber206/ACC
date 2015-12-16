@@ -126,7 +126,8 @@ end
 ## get all capabilities for a project
 get '/projects/:id/capabilities' do
   if params['id'].to_i != 0
-    Capability.where(project_id: params['id']).all.to_json
+    capabilities = Capability.where(project_id: params['id']).all.to_json
+    capabilities
   end
 end
 
@@ -168,7 +169,8 @@ delete '/capabilities/:id' do
 end
 
 get '/capabilites/results/:id' do
-  Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
+  results = Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
+  results
 end
 
 ###################
@@ -178,6 +180,7 @@ end
 ## get map
 get '/projects/:id/capability_maps' do
   if params['id'].to_i != 0
-    CapabilityMap.where(project_id: params['id']).all.to_json
+    capability_maps = CapabilityMap.where(project_id: params['id']).all.to_json
+    capability_maps
   end
 end

@@ -15,3 +15,4 @@ gem 'oauth'
 gem 'multi_json'
 gem 'dogapi'
 gem 'dotenv'
+gem "sentry-raven"
