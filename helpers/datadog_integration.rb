@@ -19,8 +19,8 @@ end
 
 class DatadogEvent
   def initialize(start_time, end_time, sources)
-    api_key=IO.readlines(File.dirname(__FILE__) + "/../datadog_keys.txt")[0].chomp
-    app_key=IO.readlines(File.dirname(__FILE__) + "/../datadog_keys.txt")[1].chomp
+    api_key=ENV['DATADOG_API_KEY']
+    app_key=ENV['DATADOG_APP_KEY']
     params = {api_key: api_key, application_key: app_key, start: start_time, end: end_time, sources: sources}
     uri = URI.parse("https://app.datadoghq.com/api/v1/events")
     uri.query = URI.encode_www_form(params)
