@@ -40728,7 +40728,6 @@
 	  }
 	
 	  $scope.openProject = function(id) {
-	    console.log (id)
 	    $http({
 	      method: 'GET',
 	      url: '/projects/' + id
