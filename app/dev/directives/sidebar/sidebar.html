@@ -1,0 +1,19 @@
+<div class="sidebar" ng-init="getProjects()">
+
+  <div class="projects">
+    <div class="project-listing" ng-repeat="project in projectList">
+      <a ng-href="/?project={{project.id}}" ng-click="openProject(project.id)">{{project.name}}</a>
+    </div>
+  <a href="" class="add-project" ng-click="project.editing=true" >Add</a>
+
+  <div ng-if="project.editing==true">
+    <form class="new-project">
+      <label for="projectName">Name</label>
+      <input id="projectName" ng-model="project.name" type="text">
+      <input type="submit" value="Add Project" ng-click="addProject(project);project.editing=false"></input>
+      <a href="" ng-click="project.editing=false">Cancel</a>
+    </form>
+  </div>
+  </div>
+
+</div>

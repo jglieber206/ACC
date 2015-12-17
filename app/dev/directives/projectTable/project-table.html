@@ -1,0 +1,24 @@
+<div>
+  <table id="grid">
+    <tr>
+      <th>&nbsp</th>
+      <th ng-repeat="attribute in attributesList">{{attribute.name}}</th>
+    </tr>
+    <tr ng-repeat="component in componentsList">
+      <th>{{component.name}}</th>
+      <td ng-repeat="attribute in attributesList" ng-init="getCellCapabilities(attribute.id, component.id)" class="tableCell" ng-style="{'background-color': cellColor}">
+        <a href="#openModal">
+          <div ng-click="
+          cellCapList(getCellCapabilities(attribute.id, component.id));
+          showCapList();
+          getCurrentAttr(attribute.id);
+          getCurrentComp(component.id);" >
+            <button>
+              {{getCellCapabilities(attribute.id, component.id)[0].name}}
+            </button>
+          </div>
+        </a>
+      </td>
+    </tr>
+  </table>
+</div>

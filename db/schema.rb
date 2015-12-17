@@ -25,9 +25,9 @@ ActiveRecord::Schema.define(version: 20150819210813) do
     t.string  "name"
     t.integer "project_id"
     t.integer "result_id"
+    t.string  "integration"
     t.string  "code"
     t.string  "url"
-    t.string  "oauth"
     t.boolean "last_result"
   end
 
@@ -45,6 +45,14 @@ ActiveRecord::Schema.define(version: 20150819210813) do
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
+  end
+
+  create_table "results", force: :cascade do |t|
+    t.integer  "capability_id"
+    t.integer  "project_id"
+    t.integer  "time_start"
+    t.integer  "time_end"
+    t.boolean  "result"
   end
 
 end

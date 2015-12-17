@@ -11,3 +11,8 @@ gem 'rake'
 gem 'rufus-scheduler'
 gem 'faraday'
 gem 'execjs'
+gem 'oauth'
+gem 'multi_json'
+gem 'dogapi'
+gem 'dotenv'
+gem "sentry-raven"

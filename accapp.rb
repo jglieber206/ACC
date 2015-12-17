@@ -1,29 +1,44 @@
-require 'bundler/setup'
+require 'dotenv'
+Dotenv.load
 require 'sinatra'
 require 'sinatra/activerecord'
-require './config/environments'
 require './models/project'
 require './models/attribute'
 require './models/component'
 require './models/capability'
 require './models/capability_map'
+require './models/result'
+require './helpers/result_fetcher'
+require './helpers/jira_integration'
 require 'pg'
 require 'json'
 require 'rufus-scheduler'
-require './helpers/result_fetcher'
+require 'bundler/setup'
 
+set :bind, '0.0.0.0'
+set :server, 'thin'
+set :port, 9292
 set :public_folder, File.dirname(__FILE__) + '/public'
 
 @@fetcher = ResultFetcher.new
 @@scheduler = Rufus::Scheduler.new
-@@scheduler.every '30s' do
+@@scheduler.every '300s' do
   @@fetcher.run
 end
 
+after { ActiveRecord::Base.connection.close }
 
 ###############################################
 ## Project list & general endpoint functions ##
 ###############################################
+
+#  preview
+post '/preview' do
+  Struct.new("Preview", :url, :integration)
+  data = JSON.parse request.body.read
+  capability = Struct::Preview.new(data["url"], data["integration"])
+  @@fetcher.fetch(capability)
+end
 
 ## Get all projects
 get '/projects' do
@@ -32,19 +47,22 @@ end
 
 ## Get project by id
 get '/projects/:id' do
-  Project.find(params['id'].to_i).to_json
+  if params['id'].to_i != 0
+    Project.find(params['id'].to_i).to_json
+  end
 end
 
 ## Add new project
 post '/projects' do
-  payload = request.body.read
-  new_project = Project.new(name: payload)
+  payload = JSON.parse request.body.read
+  new_project = Project.new(name: payload["name"])
   new_project.save
+  new_project.to_json
 end
 
 ## Delete specific project (including all properties of project)
 delete '/projects/:id' do
-  project = Project.find(params['id'].to_i)
+  project = Project.find(params['id'])
   project.destroy
 end
 
@@ -59,12 +77,14 @@ get '/public/:filename' do
 end
 
 #########################
-## Attribute functions ##
+## Attribute routes ##
 #########################
 
 ## Access attributes list for a specified project
 get '/projects/:id/attributes' do
-  Attribute.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    Attribute.where(project_id: params['id']).all.to_json
+  end
 end
 
 post '/projects/:id/attributes' do
@@ -79,12 +99,14 @@ delete '/attributes/:id' do
 end
 
 #########################
-## Component functions ##
+## Component routes ##
 #########################
 
 ## Access components list for a specified project
 get '/projects/:id/components' do
-  Component.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    Component.where(project_id: params['id']).all.to_json
+  end
 end
 
 post '/projects/:id/components' do
@@ -98,12 +120,15 @@ delete '/components/:id' do
   component.destroy
 end
 ##########################
-## Capability functions ##
+## Capability routes ##
 ##########################
 
 ## get all capabilities for a project
 get '/projects/:id/capabilities' do
-  Capability.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    capabilities = Capability.where(project_id: params['id']).all.to_json
+    capabilities
+  end
 end
 
 ## get capabilities for an attribute/component intersection
@@ -113,41 +138,47 @@ get '/attributes/:attr_id/components/:comp_id' do
     tmp << map.capability_id
   end
   capList = Capability.where(id: tmp).all.to_json
-  return capList
+  capList
 end
 
 ## add new capability to attribute/component intersection
 post '/attributes/:attr_id/components/:comp_id' do
-  capName = "test capability name"
-  capCode = "new cap code"
-  capUrl = "www.test.com"
-  capAuth = "test oauth"
-  proj_id = Attribute.where(id: params['attr_id']).project_id
-  new_capability = Capability.new(name: capName, project_id: proj_id, code: capCode, url: capUrl, oauth: capAuth)
+  data = JSON.parse request.body.read
+  new_capability = Capability.new(name: data['name'], project_id: data['project_id'], code: data['code'], url: data['url'], integration: data['integration'])
   new_capability.save
-  @@fetcher.add(new_capabilty)
-  new_projectMap = ProjectMap.new(project_id: proj_id, attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id)
+  CapabilityMap.new(project_id: data['project_id'], attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id).save
+  new_capability.to_json
 end
 
 ## update capability
-# update '/capabilities/:id' do
-#
-# @@fetcher.add(capability) ???
-#
-# end
+post '/capabilities/update/:id' do
+  data = JSON.parse request.body.read
+  capability = Capability.find(params['id'])
+  capability.update(name: data['name'], code: data['code'], url: data['url'], integration: data['integration'])
+  capability.to_json
+end
 
 delete '/capabilities/:id' do
-  capability = Capability.where(id: params['id'])
-  map = ProjectMap.where(capability_id: params['id'])
+  capability = Capability.find(params['id'])
+  map = CapabilityMap.where(capability_id: params['id'])
   capability.destroy
-  map.destroy
+  map.destroy_all
+  capability
+end
+
+get '/capabilites/results/:id' do
+  results = Result.where(capability_id: params['id']).limit(1).order(time_start: :desc).to_json
+  results
 end
 
 ###################
-## Map functions ##
+## Map routes ##
 ###################
 
 ## get map
 get '/projects/:id/capability_maps' do
-  CapabilityMap.where(project_id: params['id']).all.to_json
+  if params['id'].to_i != 0
+    capability_maps = CapabilityMap.where(project_id: params['id']).all.to_json
+    capability_maps
+  end
 end

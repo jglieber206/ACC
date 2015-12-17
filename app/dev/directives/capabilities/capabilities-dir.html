@@ -1,0 +1,57 @@
+<div ng-if="showCaps" style="background-color:white" id="openModal" class="modalDialog">
+  <a href="#close" ng-click="openProject(project.id);clearPreview()" title="Close" class="close">X</a>
+  <h3>{{currentComponent.name}} + {{currentAttribute.name}}</h3>
+
+  <div class="capability-listing" ng-repeat="capability in capsInCell">
+    <div>{{capability.name}}</div>
+    <div>Last Result:  {{capability.last_result}}</div>
+    <div ng-init="getHistory(capability)">Since:
+      <span>{{history[0].time_start*1000 | date:'medium'}}</span>
+    </div>
+
+    <form ng-if="capability.editing">
+      <label for="capabilityIntegration">Type</label>
+      <select id="capabilityIntegration" ng-model="capability.integration" type="text">
+        <option value="jira">Jira</option>
+        <option value="jenkins">Jenkins</option>
+        <option value="dd_event">DataDog Event</option>
+        <option value="dd_metric">DataDog Metric</option>
+      </select><br>
+      <label for="capabilityName">Name</label>
+      <input id="capabilityName" ng-model="capability.name" type="text"><br>
+      <label for="capabilityCode">Test</label>
+      <input id="capabilityCode" ng-model="capability.code" type="text"><br>
+      <label for="capabilityUrl">URL</label>
+      <input id="capabilityUrl" ng-model="capability.url" type="text"><br>
+      <input type="submit" value="Save Changes" ng-click="updateCapability(capability); toggleEditing(capability)">
+    </form>
+    <div class="form-buttons">
+      <a ng-click="toggleEditing(capability)" ng-if="!capability.editing"><img src="/img/gear.png"></a>
+      <button ng-click="toggleEditing(capability)" ng-if="capability.editing">Cancel</button>
+      <button ng-click="deleteCapability(capability)" ng-if="capability.editing">Delete Capability</button>
+    </div>
+  </div>
+
+  <form class="new-capabilitiy-form">
+    <label for="newCapabilityIntegration">Type</label>
+    <select id="newCapabilityIntegration" ng-model="newCapability.integration">
+      <option value="jira">Jira</option>
+      <option value="jenkins">Jenkins</option>
+      <option value="dd_event">DataDog Event</option>
+      <option value="dd_metric">DataDog Metric</option>
+    </select><br><br>
+    <label for="newCapabilityName">Name</label>
+    <input id="newCapabilityName" ng-model="newCapability.capabilityName" type="text"></p>
+    <label for="newCapabilityCode">Test</label>
+    <input id="newCapabilityCode" ng-model="newCapability.capabilityCode" type="text"></p>
+    <label for="newCapabilityUrl">URL</label>
+    <input id="newCapabilityUrl" ng-model="newCapability.capabilityUrl" type="text"></p>
+    <input type="submit" value="Add Capability" ng-click="addCapability(newCapability, project.id);"><br>
+
+    <button name="preivew" ng-click="preview(newCapability)">Preview</button>
+  </form>
+
+  <div id="jsonPreview">
+
+  </div>
+</div>
