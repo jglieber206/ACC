@@ -34,9 +34,9 @@ after { ActiveRecord::Base.connection.close }
 
 #  preview
 post '/preview' do
-  Struct.new("Preview", :url, :integration)
+  Struct.new("Preview", :url, :integration, :dd_tags, :dd_length)
   data = JSON.parse request.body.read
-  capability = Struct::Preview.new(data["url"], data["integration"])
+  capability = Struct::Preview.new(data["url"], data["integration"], data["dd_tags"], data["dd_length"])
   @@fetcher.fetch(capability)
 end
 
@@ -144,7 +144,7 @@ end
 ## add new capability to attribute/component intersection
 post '/attributes/:attr_id/components/:comp_id' do
   data = JSON.parse request.body.read
-  new_capability = Capability.new(name: data['name'], project_id: data['project_id'], code: data['code'], url: data['url'], integration: data['integration'])
+  new_capability = Capability.new(name: data['name'], project_id: data['project_id'], code: data['code'], url: data['url'], integration: data['integration'], dd_tags: data['dd_tags'], dd_length: data['dd_length'].to_i)
   new_capability.save
   CapabilityMap.new(project_id: data['project_id'], attribute_id: params['attr_id'], component_id: params['comp_id'], capability_id: new_capability.id).save
   new_capability.to_json
@@ -154,7 +154,7 @@ end
 post '/capabilities/update/:id' do
   data = JSON.parse request.body.read
   capability = Capability.find(params['id'])
-  capability.update(name: data['name'], code: data['code'], url: data['url'], integration: data['integration'])
+  capability.update(name: data['name'], code: data['code'], url: data['url'], integration: data['integration'], dd_tags: data['dd_tags'], dd_length: data['dd_length'].to_i)
   capability.to_json
 end
 
