@@ -20,7 +20,7 @@ class ResultFetcher
       when "jira"
         $access_token.get(capability.url).body
       when "dd_event"
-        DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
+        DatadogEvent.new(Time.now.to_i - 604800, Time.now.to_i, capability.url, capability.dd_tags).result
       when "dd_metric"
         DatadogMetric.new(Time.now.to_i - 604800, Time.now.to_i, capability.url).result
     end

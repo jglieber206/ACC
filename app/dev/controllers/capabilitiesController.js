@@ -18,7 +18,8 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
           name: newCapability.capabilityName,
           project_id: proj_id,
           code: newCapability.capabilityCode,
-          url: newCapability.capabilityUrl
+          url: newCapability.capabilityUrl,
+          dd_tags: newCapability.dd_tags
         }
       }).success(function(response) {
         $scope.capsInCell.push(response)
@@ -41,7 +42,8 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
         url: '/preview',
         data: {
           integration: newCapability.integration,
-          url: newCapability.capabilityUrl
+          url: newCapability.capabilityUrl,
+          dd_tags: newCapability.dd_tags
         }
       }).success(function(response) {
         $scope.previewResponse = JSON.stringify(response, null, 2)
@@ -65,7 +67,8 @@ app.controller('CapabilitiesController', ['$scope', '$http', '$rootScope', funct
           integration: capability.integration,
           name: capability.name,
           code: capability.code,
-          url: capability.url
+          url: capability.url,
+          dd_tags: capability.dd_tags
         }
       }).success(function(response) {
         $scope.capsInCell.splice($scope.capsInCell.indexOf(capability), 1, response);

@@ -18,10 +18,10 @@ class DatadogMetric
 end
 
 class DatadogEvent
-  def initialize(start_time, end_time, sources)
+  def initialize(start_time, end_time, sources, tags)
     api_key=ENV['DATADOG_API_KEY']
     app_key=ENV['DATADOG_APP_KEY']
-    params = {api_key: api_key, application_key: app_key, start: start_time, end: end_time, sources: sources}
+    params = {api_key: api_key, application_key: app_key, start: start_time, end: end_time, sources: sources, tags: tags}
     uri = URI.parse("https://app.datadoghq.com/api/v1/events")
     uri.query = URI.encode_www_form(params)
     @response = Net::HTTP.get(uri)
