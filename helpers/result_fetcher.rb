@@ -36,7 +36,7 @@ class ResultFetcher
         capability_code = %Q{ #{capability.code} }
         result = eval("#{result_hash}#{capability_code}")
       rescue => e
-         result = false
+        result = false
       end
       capability.last_result = result
       capability.save
@@ -45,6 +45,7 @@ class ResultFetcher
   end
 
   def run
+    @to_do.clear
     ActiveRecord::Base.connection_pool.with_connection do
       Capability.all.each do |capability|
         @to_do[capability.id] = capability unless @to_do[capability.id]
