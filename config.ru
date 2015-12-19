@@ -12,6 +12,6 @@ end
 use Raven::Rack
 
 use Rack::Timeout
-Rack::Timeout.timeout = 5
+Rack::Timeout.timeout = 12
 
 run Sinatra::Application
