@@ -1,0 +1,31 @@
+.attr-comp-list {
+  background-color: #E5EAEC;
+  position: absolute;
+  right: 10px;
+  top: 185px;
+  border: 1px solid black;
+  float: right;
+  display: inline-block;
+  text-align: center;
+
+  ul {
+    margin-bottom: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+    list-style-type: none;
+    li {
+      text-align: left;
+      .delete-att-comp{
+        float:right;
+      }
+    }
+  }
+
+  .add-att-comp {
+    margin-top: 15px;
+    width: 80%
+  }
+
+
+
+}

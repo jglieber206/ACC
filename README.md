@@ -28,3 +28,6 @@ Components (nouns of the system) are building blocks that together constitute th
 Capabilities (verbs of the system) describe the abilities of a particular Component in order to satisfy the Attributes of the system. An example Capability for a shopping site could be "Processes monetary transactions using HTTPS". You can see that this could be a Capability of the "Cart" component when trying to meet the "Secure" Attribute. The most important aspect of Capabilities is that they are testable.
 Defining Capabilities requires you to visit each intersection point between Attributes and Components; this often can lead to discovery of areas which otherwise may have gone unrecognized or untested in a conventional test plan. This could be as simple as assuring there is thought put into the security of an entire system (via the Attribute "Secure"), or details specific to your project when considered to specific characteristics you want your product to exhibit. It can also help assure consideration is given to all qualities are considered as new Capabilities are added to your product.
 Read more here: https://code.google.com/p/test-analytics/wiki/AccExplained
+
+
+postgres -D /usr/local/var/postgres

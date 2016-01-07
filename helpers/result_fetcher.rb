@@ -1,7 +1,10 @@
 require 'active_record'
 require_relative '../models/capability'
+require_relative '../models/result'
 require 'faraday'
-require 'execjs'
+require './helpers/jira_integration'
+require './helpers/datadog_integration'
+require 'json'
 
 class ResultFetcher
 
@@ -9,39 +12,59 @@ class ResultFetcher
     @to_do = {}
   end
 
-  def fetch(url)
-    result = Faraday.get(url)
-    200 == result.status ? result.body : result.status
-  rescue => e
-    e
-  end
-
-  def run
-    Capability.all.each do |capability|
-      @to_do[capability.id] = capability unless @to_do[capability.id]
+  def fetch(capability)
+    case capability.integration
+      when "jenkins"
+        result = Faraday.get(capability.url)
+        200 == result.status ? result.body : result.status
+      when "jira"
+        $access_token.get(capability.url).body
+      when "dd_event"
+        DatadogEvent.new(capability.dd_length, capability.url, capability.dd_tags).result
+      when "dd_metric"
+        DatadogMetric.new(capability.dd_length, capability.url).result
     end
-    internal_runner
+  rescue => e
   end
 
   def internal_runner
     @to_do.each do |id, capability|
-      test_result = fetch(capability.url)
+      test_result = fetch(capability)
       result = ""
       begin
-        result = ExecJS.eval("#{test_result}#{capability.code}")
+        result_hash = JSON.parse(%Q{ #{test_result} })
+        capability_code = %Q{ #{capability.code} }
+        result = eval("#{result_hash}#{capability_code}")
       rescue => e
-         puts e
-         result = false
+        result = false
       end
-      puts result
       capability.last_result = result
       capability.save
+      check_result(capability)
     end
   end
 
-  def add(capability)
-    return if @to_do[capability.id]
-    @to_do[capability.id] = capability
-    internal_runner
+  def run
+    @to_do.clear
+    ActiveRecord::Base.connection_pool.with_connection do
+      Capability.all.each do |capability|
+        @to_do[capability.id] = capability unless @to_do[capability.id]
+      end
+      internal_runner
+    end
+  end
+
+  def check_result (capability)
+    time = Time.now.getutc
+    check = Result.where(capability_id: capability.id).order(time_start: :desc).first
+    if !check
+      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time_start: time, result: capability.last_result)
+      new_result.save
+    elsif  check.result != capability.last_result
+      check.time_end = time
+      check.save
+      new_result = Result.new(capability_id: capability.id, project_id: capability.project_id, time_start: time, result: capability.last_result)
+      new_result.save
+    end
   end
 end

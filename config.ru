@@ -1,8 +1,17 @@
 # config.ru
-require 'bundler'
 require 'rubygems'
+require 'bundler'
+require 'raven'
+require 'sinatra'
+require './accapp'
+require "rack-timeout"
 
-Bundler.require
+Raven.configure() do |config|
+  config.dsn = ENV['SENTRY']
+end
+use Raven::Rack
 
-require './app'
-run AccApp
+use Rack::Timeout
+Rack::Timeout.timeout = 12
+
+run Sinatra::Application

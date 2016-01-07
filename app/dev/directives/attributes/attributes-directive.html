@@ -1,0 +1,16 @@
+<div class="edit-att-comp" ng-controller="AttributesController" id="edit_attributes">
+  <h3>Attribute</h3>
+  <ul ng-repeat="attribute in attributesList">
+    <li>
+      {{attribute.name}}
+      <button class="delete-att-comp" ng-click="deleteAttribute(attribute.id)">Remove</button>
+    </li>
+  </ul>
+  <button class="add-att-comp" ng-click="addAttr=true" ng-hide="addAttr">Add</button>
+  <form ng-show="addAttr">
+    <label for="new-attribute">New Attribute Name:<br><label>
+    <input id="new-attribute" ng-model="newAttribute" type="text"><br>
+    <input type="submit" value="Add Attribute" ng-click="addAttribute(project.id);addAttr=false"><br>
+    <button ng-click="addAttr=false">Cancel</button>
+  </form>
+</div>
